@@ -17,4 +17,7 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    //테스트 브랜치
+    //테스트 22
+
 }
