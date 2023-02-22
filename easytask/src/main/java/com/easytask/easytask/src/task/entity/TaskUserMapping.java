@@ -21,7 +21,7 @@ public class TaskUserMapping extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
-    private User user;
+    private User irumi;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "postId")
