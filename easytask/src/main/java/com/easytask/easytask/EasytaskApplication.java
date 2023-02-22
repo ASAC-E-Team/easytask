@@ -8,6 +8,7 @@ public class EasytaskApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(EasytaskApplication.class, args);
+
 	}
 
 }

@@ -12,6 +12,11 @@ public enum BaseResponseStatus {
      */
     SUCCESS(true, HttpStatus.OK.value(), "요청에 성공하였습니다."),
 
+
+    /**
+     * 400 : Request, Response 오류
+     */
+
     UNEXPECTED_ERROR(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "예상치 못한 에러가 발생했습니다.");
 
 
