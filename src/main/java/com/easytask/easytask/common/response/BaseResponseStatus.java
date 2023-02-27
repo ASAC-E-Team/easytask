@@ -20,6 +20,11 @@ public enum BaseResponseStatus {
     UNEXPECTED_ERROR(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "예상치 못한 에러가 발생했습니다.");
 
 
+
+
+
+
+
     private final boolean isSuccess;
     private final int code;
     private final String message;

@@ -37,4 +37,6 @@ public class Rating extends BaseEntity {
         this.relatedAbilityRating = relatedAbilityRating;
         this.personalAbilityRating = personalAbilityRating;
     }
+
+
 }
