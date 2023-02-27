@@ -1,11 +1,11 @@
 package com.easytask.easytask.src.task.entity;
 
 import com.easytask.easytask.common.BaseEntity;
+import com.easytask.easytask.src.task.dto.TaskRequestDto;
 import com.easytask.easytask.src.user.entity.User;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,7 +15,10 @@ import java.util.List;
 @Getter
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@DynamicInsert
+@DynamicUpdate
 public class Task extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, updatable = false)
@@ -33,6 +36,8 @@ public class Task extends BaseEntity {
 
     private String categorySmall;
 
+    private Integer numberOfIrumi;
+
     @OneToMany(mappedBy = "task", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<TaskUserMapping> IrumiList = new ArrayList<>();
 
@@ -40,9 +45,32 @@ public class Task extends BaseEntity {
     private List<RelatedAbility> relatedAbilityList = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
-    private MatchingStatus matchingStatus = MatchingStatus.NOT_MATCHED;
+    private MatchingStatus matchingStatus = MatchingStatus.STANDBY;
+
+    public void updateTask(TaskRequestDto taskRequestDto) {
+        this.taskName = taskRequestDto.getTaskName();
+        this.details = taskRequestDto.getDetails();
+        this.categoryBig = taskRequestDto.getCategoryBig();
+        this.categorySmall = taskRequestDto.getCategorySmall();
+        this.numberOfIrumi = taskRequestDto.getNumberOfIrumi();
+    }
+
+    public void deleteTask() {
+        this.state = State.INACTIVE;
+    }
 
     public enum MatchingStatus {
-        NOT_MATCHED, NOT_STARTED, DOING, DONE
+        STANDBY, NOT_MATCHED, NOT_STARTED, DOING, DONE
+    }
+
+    @Builder
+    public Task(User customer, String taskName, String details,
+                String categoryBig, String categorySmall, Integer numberOfIrumi) {
+        this.customer = customer;
+        this.taskName = taskName;
+        this.details = details;
+        this.categoryBig = categoryBig;
+        this.categorySmall = categorySmall;
+        this.numberOfIrumi = numberOfIrumi;
     }
 }

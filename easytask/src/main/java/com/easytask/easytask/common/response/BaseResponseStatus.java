@@ -16,7 +16,12 @@ public enum BaseResponseStatus {
     /**
      * 400 : Request, Response 오류
      */
+    NOT_FOUND_USER(false, HttpStatus.NO_CONTENT.value(), "유저가 존재하지 않습니다."),
 
+    /**
+     * 500
+     */
+    DB_CONNECTION_ERROR(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "데이터 베이스 오류 발생"),
     UNEXPECTED_ERROR(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "예상치 못한 에러가 발생했습니다.");
 
 
