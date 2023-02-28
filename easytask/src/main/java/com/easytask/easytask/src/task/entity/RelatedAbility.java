@@ -30,4 +30,8 @@ public class RelatedAbility extends BaseEntity {
         this.categoryBig = categoryBig;
         this.categorySmall = categorySmall;
     }
+
+    public void deleteRelatedAbility() {
+        this.state = State.INACTIVE;
+    }
 }

@@ -16,7 +16,9 @@ public enum BaseResponseStatus {
     /**
      * 400 : Request, Response 오류
      */
-    NOT_FOUND_USER(false, HttpStatus.NO_CONTENT.value(), "유저가 존재하지 않습니다."),
+    NOT_FOUND_USER(false, HttpStatus.NOT_FOUND.value(), "유저가 존재하지 않습니다."),
+    NOT_FOUND_TASK(false, HttpStatus.NOT_FOUND.value(), "업무가 존재하지 않습니다."),
+    NOT_FOUND_ABILITY(false, HttpStatus.NOT_FOUND.value(), "해당 역량을 업무 요청서에 등록한 적이 없습니다."),
 
     /**
      * 500

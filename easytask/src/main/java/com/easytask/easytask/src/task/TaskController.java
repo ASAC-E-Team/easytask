@@ -1,6 +1,8 @@
 package com.easytask.easytask.src.task;
 
 import com.easytask.easytask.common.response.BaseResponse;
+import com.easytask.easytask.src.task.dto.request.RelatedAbilityRequestDto;
+import com.easytask.easytask.src.task.dto.response.RelatedAbilityResponseDto;
 import com.easytask.easytask.src.task.dto.response.TaskResponseDto;
 import com.easytask.easytask.src.task.dto.request.TaskRequestDto;
 import com.easytask.easytask.src.task.dto.response.TaskIdResponseDto;
@@ -44,5 +46,20 @@ public class TaskController {
     public BaseResponse<String> deleteTask(@PathVariable("taskId") Long taskId) {
         taskService.deleteTask(taskId);
         return new BaseResponse<>("업무가 삭제되었습니다.");
+    }
+
+    @ResponseBody
+    @PostMapping("{taskId}/related-abilities")
+    public BaseResponse<RelatedAbilityResponseDto> postRelatedAbility(
+            @PathVariable("taskId") Long taskId, @RequestBody RelatedAbilityRequestDto relatedAbilityRequestDto) {
+        RelatedAbilityResponseDto relatedAbilityResponseDto = taskService.postRelatedAbility(taskId, relatedAbilityRequestDto);
+        return new BaseResponse<>(relatedAbilityResponseDto);
+    }
+
+    @ResponseBody
+    @DeleteMapping("related-abilities/{relatedAbilityId}")
+    public BaseResponse<String> deleteRelatedAbility(@PathVariable("relatedAbilityId") Long relatedAbilityId) {
+        taskService.deleteRelatedAbility(relatedAbilityId);
+        return new BaseResponse<>("업무 관련 역량에서 제외 되었습니다.");
     }
 }
