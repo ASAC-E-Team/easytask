@@ -1,9 +1,9 @@
 package com.easytask.easytask.src.task;
 
 import com.easytask.easytask.common.response.BaseResponse;
-import com.easytask.easytask.src.task.dto.TaskResponseDto;
-import com.easytask.easytask.src.task.dto.TaskRequestDto;
-import com.easytask.easytask.src.task.dto.TaskIdResponseDto;
+import com.easytask.easytask.src.task.dto.response.TaskResponseDto;
+import com.easytask.easytask.src.task.dto.request.TaskRequestDto;
+import com.easytask.easytask.src.task.dto.response.TaskIdResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;

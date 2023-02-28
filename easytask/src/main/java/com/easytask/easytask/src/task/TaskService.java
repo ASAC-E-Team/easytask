@@ -1,9 +1,9 @@
 package com.easytask.easytask.src.task;
 
 import com.easytask.easytask.common.exception.BaseException;
-import com.easytask.easytask.src.task.dto.TaskResponseDto;
-import com.easytask.easytask.src.task.dto.TaskRequestDto;
-import com.easytask.easytask.src.task.dto.TaskIdResponseDto;
+import com.easytask.easytask.src.task.dto.response.TaskResponseDto;
+import com.easytask.easytask.src.task.dto.request.TaskRequestDto;
+import com.easytask.easytask.src.task.dto.response.TaskIdResponseDto;
 import com.easytask.easytask.src.task.entity.Task;
 import com.easytask.easytask.src.task.repository.TaskRepository;
 import com.easytask.easytask.src.user.UserRepository;

@@ -1,4 +1,4 @@
-package com.easytask.easytask.src.task.dto;
+package com.easytask.easytask.src.task.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;

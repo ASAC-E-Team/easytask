@@ -1,4 +1,4 @@
-package com.easytask.easytask.src.task.dto;
+package com.easytask.easytask.src.task.dto.response;
 
 import com.easytask.easytask.src.task.entity.Task;
 import com.fasterxml.jackson.annotation.JsonInclude;

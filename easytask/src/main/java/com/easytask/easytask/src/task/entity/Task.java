@@ -1,7 +1,7 @@
 package com.easytask.easytask.src.task.entity;
 
 import com.easytask.easytask.common.BaseEntity;
-import com.easytask.easytask.src.task.dto.TaskRequestDto;
+import com.easytask.easytask.src.task.dto.request.TaskRequestDto;
 import com.easytask.easytask.src.user.entity.User;
 import lombok.*;
 import org.hibernate.annotations.DynamicInsert;
@@ -21,7 +21,7 @@ public class Task extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false, updatable = false)
+    @Column(name = "taskId",nullable = false, updatable = false)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

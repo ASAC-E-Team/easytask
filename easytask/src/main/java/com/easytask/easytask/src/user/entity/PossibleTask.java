@@ -6,7 +6,6 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "POSSIBLETASK")
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
