@@ -2,6 +2,7 @@ package com.easytask.easytask.src.user.entity;
 
 import com.easytask.easytask.common.BaseEntity;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -25,14 +26,29 @@ public class User extends BaseEntity {
     @Column(nullable = false, length = 30)
     private String name;
 
+    @Column(nullable = false)
     private String password;
 
-    @OneToMany(mappedBy = "user")
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     List<PossibleTask> possibleTaskList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     List<TaskAbility> taskAbilityList = new ArrayList<>();
 
-
-
+    @Builder
+    public User (String email, String password, String name,Role role){
+        this.email=email;
+        this.password=password;
+        this.name=name;
+        this.role=role;
+    }
+    public void addPossibleTask(PossibleTask possibleTask){
+        this.possibleTaskList.add(possibleTask);
+    }
+    public void addTaskAbility(TaskAbility taskAbility){
+        this.taskAbilityList.add(taskAbility);
+    }
 }
