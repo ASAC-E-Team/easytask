@@ -45,4 +45,6 @@ public class Task extends BaseEntity {
     public enum MatchingStatus {
         NOT_MATCHED, NOT_STARTED, DOING, DONE
     }
+
+    public Task(User user, String taskName, String categoryBig, String categorySmall) {}
 }

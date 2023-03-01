@@ -14,7 +14,10 @@ public class PersonalAbility {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(nullable = false)
     private String personalAbility;
+
+    public PersonalAbility(String personalAbility) {
+        this.personalAbility = personalAbility;
+    }
 }

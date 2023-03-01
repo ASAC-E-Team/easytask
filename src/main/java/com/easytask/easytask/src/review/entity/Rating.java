@@ -17,17 +17,14 @@ public class Rating extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "rating_id")
+    @Column(name = "ratingId")
     private Long id;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "relatedAbilityId")
     private RelatedAbility relatedAbility;
-
     @ManyToOne
     @JoinColumn(name = "personalAbilityId")
     private PersonalAbility personalAbility;
-
     private int relatedAbilityRating;
     private int personalAbilityRating;
 
@@ -37,6 +34,5 @@ public class Rating extends BaseEntity {
         this.relatedAbilityRating = relatedAbilityRating;
         this.personalAbilityRating = personalAbilityRating;
     }
-
 
 }

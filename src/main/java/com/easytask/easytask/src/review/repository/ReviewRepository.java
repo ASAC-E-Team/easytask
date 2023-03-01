@@ -1,4 +1,4 @@
-package com.easytask.easytask.src.review;
+package com.easytask.easytask.src.review.repository;
 
 import com.easytask.easytask.common.BaseEntity.State;
 import com.easytask.easytask.common.exception.BaseException;

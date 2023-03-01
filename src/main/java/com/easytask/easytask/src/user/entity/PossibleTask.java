@@ -27,4 +27,10 @@ public class PossibleTask extends BaseEntity {
 
     private String categorySmall;
 
+    public PossibleTask(User user, String categoryBig, String categorySmall) {
+        this.user = user;
+        this.categoryBig = categoryBig;
+        this.categorySmall = categorySmall;
+    }
+
 }

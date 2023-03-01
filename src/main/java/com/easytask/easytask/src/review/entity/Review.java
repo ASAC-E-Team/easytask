@@ -19,18 +19,25 @@ public class Review extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "reviewId")
     private Long id;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "taskId")
     private Task task;
-
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "taskUserMappingId")
     private TaskUserMapping taskUserMapping;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ratingId")
     private Rating rating;
+    private String context;
     @Column(name = "createAt")
     private LocalDateTime localDateTime;
 
+    public Review(Task task, TaskUserMapping taskUserMapping, Rating rating, String context) {
+        this.task = task;
+        this.taskUserMapping = taskUserMapping;
+        this.rating = rating;
+        this.context = context;
+    }
 
 }

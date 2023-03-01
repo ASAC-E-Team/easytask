@@ -27,4 +27,10 @@ public class TaskAbility extends BaseEntity {
 
     private String categorySmall;
 
+    public TaskAbility(User user, String categoryBig, String categorySmall) {
+        this.user = user;
+        this.categoryBig = categoryBig;
+        this.categorySmall = categorySmall;
+    }
+
 }
