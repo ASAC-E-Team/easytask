@@ -8,6 +8,7 @@ import com.easytask.easytask.src.user.entity.Role;
 import com.easytask.easytask.src.user.entity.TaskAbility;
 import com.easytask.easytask.src.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,7 @@ import static com.easytask.easytask.common.response.BaseResponseStatus.REGISTERE
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public UserResponseDto registerUser(UserRequestDto requestDto) {
         if(userRepository.existsByEmail(requestDto.getEmail())){
@@ -27,7 +29,7 @@ public class UserService {
         }
         User user = User.builder()
                 .email(requestDto.getEmail())
-                .password(requestDto.getPassword())
+                .password(passwordEncoder.encode(requestDto.getPassword()))
                 .name(requestDto.getName())
                 .role(Role.ROLE_USER)
                 .build();

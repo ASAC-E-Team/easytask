@@ -5,12 +5,15 @@ import com.easytask.easytask.src.user.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Email;
 import java.util.List;
 import java.util.Map;
 
 @Getter
 @NoArgsConstructor
 public class UserRequestDto {
+
+    @Email(message = "이메일 형식에 맞지 않습니다.")
     private String email;
     private String password;
     private String name;
