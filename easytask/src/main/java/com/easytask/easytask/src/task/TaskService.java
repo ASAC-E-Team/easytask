@@ -20,9 +20,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.easytask.easytask.common.BaseEntity.State.ACTIVE;
-import static com.easytask.easytask.common.BaseEntity.State.INACTIVE;
 import static com.easytask.easytask.common.response.BaseResponseStatus.*;
 
 @Slf4j
@@ -124,6 +124,28 @@ public class TaskService {
                 .orElseThrow(() -> new BaseException(NOT_FOUND_ABILITY));
         try {
             relatedAbility.deleteRelatedAbility();
+        } catch (Exception exception) {
+            throw new BaseException(DB_CONNECTION_ERROR);
+        }
+    }
+
+    public void updateTaskToMatching(Long taskId) {
+        Task task = taskRepository.findByIdAndState(taskId, ACTIVE)
+                .orElseThrow(() -> new BaseException(NOT_FOUND_TASK));
+        Optional.ofNullable(task.getTaskName())
+                .orElseThrow(() -> new BaseException(BAD_REQUEST_NO_TASK_NAME));
+        Optional.ofNullable(task.getCategorySmall())
+                .orElseThrow(() -> new BaseException(BAD_REQUEST_NO_CATEGORY));
+        Optional.ofNullable(task.getDetails())
+                .orElseThrow(() -> new BaseException(BAD_REQUEST_NO_DETAILS));
+
+        List<RelatedAbility> relatedAbilityList = relatedAbilityRepository.findAllByTaskIdAndState(taskId, ACTIVE);
+        if (relatedAbilityList.isEmpty()) {
+            throw new BaseException(BAD_REQUEST_NO_RELATED_ABILITY);
+        }
+
+        try {
+            task.updateMatchingStatusToMatching();
         } catch (Exception exception) {
             throw new BaseException(DB_CONNECTION_ERROR);
         }

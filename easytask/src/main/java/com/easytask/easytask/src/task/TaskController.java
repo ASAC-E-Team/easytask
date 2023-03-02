@@ -62,4 +62,11 @@ public class TaskController {
         taskService.deleteRelatedAbility(relatedAbilityId);
         return new BaseResponse<>("업무 관련 역량에서 제외 되었습니다.");
     }
+
+    @ResponseBody
+    @PatchMapping("{taskId}/customers/matching")
+    public BaseResponse<String> updateTaskToMatching(@PathVariable("taskId") Long taskId) {
+        taskService.updateTaskToMatching(taskId);
+        return new BaseResponse<>("매칭 요청이 등록되었습니다.");
+    }
 }

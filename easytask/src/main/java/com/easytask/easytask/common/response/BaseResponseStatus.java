@@ -20,6 +20,10 @@ public enum BaseResponseStatus {
     NOT_FOUND_TASK(false, HttpStatus.NOT_FOUND.value(), "업무가 존재하지 않습니다."),
     NOT_FOUND_ABILITY(false, HttpStatus.NOT_FOUND.value(), "해당 역량을 업무 요청서에 등록한 적이 없습니다."),
     BAD_REQUEST_DUPLICATE_RELATED_ABILITY(false, HttpStatus.BAD_REQUEST.value(), "이미 등록한 업무관련 역량입니다."),
+    BAD_REQUEST_NO_RELATED_ABILITY(false, HttpStatus.BAD_REQUEST.value(), "업무관련 역량을 입력하서야합니다."),
+    BAD_REQUEST_NO_TASK_NAME(false, HttpStatus.BAD_REQUEST.value(), "업무 제목을 입력해주세요."),
+    BAD_REQUEST_NO_CATEGORY(false, HttpStatus.BAD_REQUEST.value(), "업무 분야를 선택해주세요."),
+    BAD_REQUEST_NO_DETAILS(false, HttpStatus.BAD_REQUEST.value(), "업무 내용을 입력해주세요."),
 
     /**
      * 500
