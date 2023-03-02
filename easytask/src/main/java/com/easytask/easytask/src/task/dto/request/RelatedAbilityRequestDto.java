@@ -11,9 +11,4 @@ import lombok.Setter;
 public class RelatedAbilityRequestDto {
     private String categoryBig;
     private String categorySmall;
-
-    public RelatedAbilityRequestDto(RelatedAbility relatedAbility) {
-        this.categoryBig = relatedAbility.getCategoryBig();
-        this.categorySmall = relatedAbility.getCategorySmall();
-    }
 }
