@@ -4,8 +4,11 @@ import com.easytask.easytask.common.exception.BaseException;
 import com.easytask.easytask.common.jwt.JwtFilter;
 import com.easytask.easytask.common.jwt.TokenProvider;
 import com.easytask.easytask.common.response.BaseResponse;
+import com.easytask.easytask.src.user.dto.requestDto.TaskRequestDto;
 import com.easytask.easytask.src.user.dto.requestDto.UserLoginDto;
 import com.easytask.easytask.src.user.dto.requestDto.UserRequestDto;
+import com.easytask.easytask.src.user.dto.responseDto.PossibleTaskResponseDto;
+import com.easytask.easytask.src.user.dto.responseDto.TaskAbilityResponseDto;
 import com.easytask.easytask.src.user.dto.responseDto.UserResponseDto;
 import com.easytask.easytask.src.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -35,9 +38,8 @@ public class UserController {
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
-
     @PostMapping("/login")
-    public BaseResponse<String> login(@Valid @RequestBody UserLoginDto loginDto) {
+    public BaseResponse<String> login(@RequestBody UserLoginDto loginDto) {
         try{
             UsernamePasswordAuthenticationToken authenticationToken =
                     new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
@@ -57,7 +59,6 @@ public class UserController {
         } catch (Exception e){
             throw new BaseException(NOT_FIND_USER);
         }
-
     }
     @PostMapping("/sign-up")
     public BaseResponse<UserResponseDto> registerUser(
@@ -69,6 +70,14 @@ public class UserController {
             throw new BaseException(NOT_VALID_EMAIL);
         }
     }
+
+    @PatchMapping("/{email}")
+    public BaseResponse<String> updateUser(
+            @Valid @RequestBody UserRequestDto requestDto, @PathVariable String email) {
+        userService.updateUser(requestDto,email);
+        return new BaseResponse<>("회원 정보를 변경하였습니다.");
+    }
+
 
     //권한 테스트(지울 예정)
     @GetMapping("/{email}")

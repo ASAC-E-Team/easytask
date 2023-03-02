@@ -34,7 +34,6 @@ public class UserResponseDto {
 
         user.getTaskAbilityList().forEach(a -> taskAbility
                 .add(Collections.singletonMap(a.getCategoryBig(), a.getCategorySmall())));
-
-
     }
+
 }

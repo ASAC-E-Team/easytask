@@ -1,6 +1,7 @@
 package com.easytask.easytask.src.user.entity;
 
 import com.easytask.easytask.common.BaseEntity;
+import com.easytask.easytask.src.user.dto.requestDto.UserRequestDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -45,6 +46,11 @@ public class User extends BaseEntity {
         this.name=name;
         this.role=role;
     }
+    public void updateUser(UserRequestDto userRequestDto){
+        this.email= userRequestDto.getEmail();
+        this.password= userRequestDto.getPassword();
+    }
+
     public void addPossibleTask(PossibleTask possibleTask){
         this.possibleTaskList.add(possibleTask);
     }

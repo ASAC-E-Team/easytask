@@ -1,7 +1,10 @@
 package com.easytask.easytask.src.user;
 
 import com.easytask.easytask.common.exception.BaseException;
+import com.easytask.easytask.src.user.dto.requestDto.TaskRequestDto;
 import com.easytask.easytask.src.user.dto.requestDto.UserRequestDto;
+import com.easytask.easytask.src.user.dto.responseDto.PossibleTaskResponseDto;
+import com.easytask.easytask.src.user.dto.responseDto.TaskAbilityResponseDto;
 import com.easytask.easytask.src.user.dto.responseDto.UserResponseDto;
 import com.easytask.easytask.src.user.entity.PossibleTask;
 import com.easytask.easytask.src.user.entity.Role;
@@ -12,15 +15,17 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Map;
 
-import static com.easytask.easytask.common.response.BaseResponseStatus.REGISTERED_USER;
+import static com.easytask.easytask.common.response.BaseResponseStatus.*;
 
 @Transactional
 @RequiredArgsConstructor
 @Service
 public class UserService {
     private final UserRepository userRepository;
+
     private final PasswordEncoder passwordEncoder;
 
     public UserResponseDto registerUser(UserRequestDto requestDto) {
@@ -56,5 +61,13 @@ public class UserService {
 
 
     }
+    public void updateUser(UserRequestDto requestDto, String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(()-> new BaseException(NOT_FIND_USER));
+        requestDto.setPassword(passwordEncoder.encode(requestDto.getPassword()));
+        user.updateUser(requestDto);
+    }
+
+
 }
 

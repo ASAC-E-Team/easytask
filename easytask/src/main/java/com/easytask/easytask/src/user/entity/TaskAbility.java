@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class TaskAbility extends BaseEntity {
+public class TaskAbility{
     @Id
     @Column(name = "professionalSkillId", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,5 +29,9 @@ public class TaskAbility extends BaseEntity {
         this.user = user;
         this.categoryBig = categoryBig;
         this.categorySmall = categorySmall;
+    }
+    public void updateSkill(String categoryBig, String categorySmall){
+        this.categoryBig=categoryBig;
+        this.categorySmall=categorySmall;
     }
 }
