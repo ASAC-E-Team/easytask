@@ -8,8 +8,10 @@ import com.easytask.easytask.src.task.dto.request.TaskRequestDto;
 import com.easytask.easytask.src.task.dto.response.TaskIdResponseDto;
 import com.easytask.easytask.src.task.entity.RelatedAbility;
 import com.easytask.easytask.src.task.entity.Task;
+import com.easytask.easytask.src.task.entity.TaskUserMapping;
 import com.easytask.easytask.src.task.repository.RelatedAbilityRepository;
 import com.easytask.easytask.src.task.repository.TaskRepository;
+import com.easytask.easytask.src.task.repository.TaskUserMappingRepository;
 import com.easytask.easytask.src.user.UserRepository;
 import com.easytask.easytask.src.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +19,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static com.easytask.easytask.common.BaseEntity.State.ACTIVE;
+import static com.easytask.easytask.common.BaseEntity.State.INACTIVE;
 import static com.easytask.easytask.common.response.BaseResponseStatus.*;
 
 @Slf4j
@@ -27,6 +32,7 @@ import static com.easytask.easytask.common.response.BaseResponseStatus.*;
 public class TaskService {
     private final TaskRepository taskRepository;
     private final RelatedAbilityRepository relatedAbilityRepository;
+    private final TaskUserMappingRepository mappingRepository;
     private final UserRepository userRepository;
 
     public TaskIdResponseDto createTask(Long customerId, TaskRequestDto taskRequestDto) {
@@ -54,7 +60,14 @@ public class TaskService {
     public TaskResponseDto getTask(Long taskId) {
         Task task = taskRepository.findByIdAndState(taskId, ACTIVE)
                 .orElseThrow(() -> new BaseException(NOT_FOUND_TASK));
-        return new TaskResponseDto(task);
+        try {
+            List<RelatedAbility> relatedAbilityList = relatedAbilityRepository.findAllByTaskIdAndState(taskId, ACTIVE);
+            List<TaskUserMapping> mappingList = mappingRepository.findAllByTaskIdAndState(taskId, ACTIVE);
+
+            return new TaskResponseDto(task, relatedAbilityList, mappingList);
+        } catch (Exception exception) {
+            throw new BaseException(DB_CONNECTION_ERROR);
+        }
     }
 
     public TaskIdResponseDto updateTask(Long taskId, TaskRequestDto taskRequestDto) {
@@ -83,6 +96,13 @@ public class TaskService {
 
     public RelatedAbilityResponseDto postRelatedAbility(
             Long taskId, RelatedAbilityRequestDto relatedAbilityRequestDto) {
+
+        relatedAbilityRepository.findByCategorySmallAndState(
+                relatedAbilityRequestDto.getCategorySmall(), ACTIVE
+        ).ifPresent((ability) -> {
+            throw new BaseException(BAD_REQUEST_DUPLICATE_RELATED_ABILITY);
+        });
+
         Task task = taskRepository.findByIdAndState(taskId, ACTIVE)
                 .orElseThrow(() -> new BaseException(NOT_FOUND_TASK));
 

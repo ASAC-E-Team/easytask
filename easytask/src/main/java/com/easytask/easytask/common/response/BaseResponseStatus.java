@@ -19,6 +19,7 @@ public enum BaseResponseStatus {
     NOT_FOUND_USER(false, HttpStatus.NOT_FOUND.value(), "유저가 존재하지 않습니다."),
     NOT_FOUND_TASK(false, HttpStatus.NOT_FOUND.value(), "업무가 존재하지 않습니다."),
     NOT_FOUND_ABILITY(false, HttpStatus.NOT_FOUND.value(), "해당 역량을 업무 요청서에 등록한 적이 없습니다."),
+    BAD_REQUEST_DUPLICATE_RELATED_ABILITY(false, HttpStatus.BAD_REQUEST.value(), "이미 등록한 업무관련 역량입니다."),
 
     /**
      * 500

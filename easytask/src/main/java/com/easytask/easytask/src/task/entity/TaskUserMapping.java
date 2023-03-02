@@ -24,6 +24,12 @@ public class TaskUserMapping extends BaseEntity {
     @JoinColumn(name = "postId")
     private Task task;
 
+    private ProgressStatus progressStatus = ProgressStatus.STANDBY;
+
+    public enum ProgressStatus {
+        STANDBY, DOING, DONE
+    }
+
     @Builder
     public TaskUserMapping(User irumi, Task task) {
         this.irumi = irumi;
