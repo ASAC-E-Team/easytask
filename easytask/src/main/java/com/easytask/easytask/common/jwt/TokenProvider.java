@@ -11,8 +11,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.PathVariable;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
@@ -41,11 +44,15 @@ public class TokenProvider implements InitializingBean { //토큰의 생성 및 
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String createToken(Authentication authentication) { //토큰을 만듬
+    // 유저 정보를 가지고 AccessToken, RefreshToken 을 생성하는 메서드
+    public String createToken(Authentication authentication) {
+        //권한을 가져온다.
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
+
+        //토큰의 유효기간 설정
         long now = (new Date()).getTime();
         Date validity = new Date(now + this.tokenValidityInMilliseconds);
 
@@ -57,7 +64,9 @@ public class TokenProvider implements InitializingBean { //토큰의 생성 및 
                 .compact();
     }
 
-    public Authentication getAuthentication(String token) { //토큰에 담겨있는 정보를 이용해 Authentication 객체 리턴
+    //토큰에 담겨있는 정보를 이용해 Authentication 객체 리턴
+    public Authentication getAuthentication(String token) {
+        //토큰 복호화
         Claims claims = Jwts
                 .parserBuilder()
                 .setSigningKey(key)
@@ -65,17 +74,18 @@ public class TokenProvider implements InitializingBean { //토큰의 생성 및 
                 .parseClaimsJws(token)
                 .getBody();
 
+        //클레임에서 권한 정보 가져오기
         Collection<? extends GrantedAuthority> authorities =
                 Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
-
-        User principal = new User(claims.getSubject(), "", authorities);
+        // UserDetails 객체를 만들어서 Authentication 리턴
+        UserDetails principal = new User(claims.getSubject(), "", authorities);
 
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
-
-    public boolean validateToken(String token) { //토큰의 유효성 검사
+    //토큰의 유효성 검사
+    public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;

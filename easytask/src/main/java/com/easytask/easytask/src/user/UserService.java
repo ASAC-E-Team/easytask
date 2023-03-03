@@ -1,20 +1,20 @@
 package com.easytask.easytask.src.user;
 
 import com.easytask.easytask.common.exception.BaseException;
-import com.easytask.easytask.src.user.dto.requestDto.TaskRequestDto;
 import com.easytask.easytask.src.user.dto.requestDto.UserRequestDto;
-import com.easytask.easytask.src.user.dto.responseDto.PossibleTaskResponseDto;
-import com.easytask.easytask.src.user.dto.responseDto.TaskAbilityResponseDto;
 import com.easytask.easytask.src.user.dto.responseDto.UserResponseDto;
 import com.easytask.easytask.src.user.entity.PossibleTask;
 import com.easytask.easytask.src.user.entity.Role;
 import com.easytask.easytask.src.user.entity.TaskAbility;
 import com.easytask.easytask.src.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -69,5 +69,20 @@ public class UserService {
     }
 
 
+    public UserResponseDto getUser(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new BaseException(NOT_FIND_USER));
+
+        return new UserResponseDto(user);
+    }
+
+    public List<UserResponseDto> getAllUser(Pageable pageable) {
+        Page<User> userList = userRepository.findAll(pageable);
+        List<UserResponseDto> userResponseDtoList = new ArrayList<>();
+        for(User a : userList){
+            userResponseDtoList.add(new UserResponseDto(a));
+        }
+        return userResponseDtoList;
+    }
 }
 

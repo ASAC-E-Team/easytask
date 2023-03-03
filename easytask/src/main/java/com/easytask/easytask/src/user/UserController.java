@@ -13,6 +13,9 @@ import com.easytask.easytask.src.user.dto.responseDto.UserResponseDto;
 import com.easytask.easytask.src.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +27,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+
+import java.util.List;
 
 import static com.easytask.easytask.common.response.BaseResponseStatus.NOT_FIND_USER;
 import static com.easytask.easytask.common.response.BaseResponseStatus.NOT_VALID_EMAIL;
@@ -45,7 +50,6 @@ public class UserController {
                     new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
 
             Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -74,26 +78,23 @@ public class UserController {
     @PatchMapping("/{email}")
     public BaseResponse<String> updateUser(
             @Valid @RequestBody UserRequestDto requestDto, @PathVariable String email) {
+
         userService.updateUser(requestDto,email);
         return new BaseResponse<>("회원 정보를 변경하였습니다.");
     }
 
-
-    //권한 테스트(지울 예정)
     @GetMapping("/{email}")
-    @Secured({"ROLE_USER", "ROLE_ADMIN"})
-    public BaseResponse<String> getUserInfo1(@PathVariable String email) {
-        System.out.println("ROLE_USER = " + email);
-
-        return new BaseResponse<>(email);
+    public BaseResponse<UserResponseDto> getUser(@PathVariable String email){
+        UserResponseDto userResponseDto = userService.getUser(email);
+        return new BaseResponse<>(userResponseDto);
     }
 
-    //권한 테스트(지울 예정)
-    @GetMapping("/admin/{email}")
+    @GetMapping("/admin")
     @Secured("ROLE_ADMIN")
-    public BaseResponse<String> getUserInfo2(@PathVariable String email) {
-        System.out.println("ROLE_ADMIN = " + email);
-
-        return new BaseResponse<>(email);
+    public BaseResponse<List<UserResponseDto>> getAllUser(
+            @PageableDefault(page = 0, size=10, sort = "createdAt", direction = Sort.Direction.DESC)
+            Pageable pageable){
+        List<UserResponseDto> userResponseDtoList = userService.getAllUser(pageable);
+        return new BaseResponse<>(userResponseDtoList);
     }
 }
