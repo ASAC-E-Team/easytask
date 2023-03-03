@@ -16,7 +16,7 @@ import javax.persistence.*;
 public class TaskUserMapping extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false, updatable = false)
+    @Column(name = "taskUserMappingId",nullable = false, updatable = false)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -26,4 +26,9 @@ public class TaskUserMapping extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "taskId")
     private Task task;
+
+    public TaskUserMapping(User irumi, Task task) {
+        this.irumi = irumi;
+        this.task = task;
+    }
 }

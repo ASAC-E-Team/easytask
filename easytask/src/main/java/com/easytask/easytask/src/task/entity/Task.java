@@ -46,5 +46,19 @@ public class Task extends BaseEntity {
         NOT_MATCHED, NOT_STARTED, DOING, DONE
     }
 
-    public Task(User user, String taskName, String categoryBig, String categorySmall) {}
+    public Task(User user, String taskName, String details, String categoryBig, String categorySmall) {
+        customer = user;
+        this.taskName = taskName;
+        this.details = details;
+        this.categoryBig = categoryBig;
+        this.categorySmall = categorySmall;
+    }
+
+    public void addIrumiList(TaskUserMapping taskUserMapping) {
+        IrumiList.add(taskUserMapping);
+    }
+
+    public void addRelatedAbilityList(RelatedAbility relatedAbility) {
+        relatedAbilityList.add(relatedAbility);
+    }
 }

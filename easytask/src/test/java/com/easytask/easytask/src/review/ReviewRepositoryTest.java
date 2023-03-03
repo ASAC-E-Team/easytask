@@ -1,6 +1,12 @@
 package com.easytask.easytask.src.review;
 
+import com.easytask.easytask.src.review.entity.Rating;
+import com.easytask.easytask.src.review.entity.Review;
 import com.easytask.easytask.src.review.repository.ReviewRepository;
+import com.easytask.easytask.src.task.TaskRepository;
+import com.easytask.easytask.src.task.entity.RelatedAbility;
+import com.easytask.easytask.src.task.entity.Task;
+import com.easytask.easytask.src.task.entity.TaskUserMapping;
 import com.easytask.easytask.src.user.UserController;
 import com.easytask.easytask.src.user.UserRepository;
 import com.easytask.easytask.src.user.UserService;
@@ -28,9 +34,11 @@ class ReviewRepositoryTest {
     @Autowired
     ReviewRepository reviewRepository;
     @Autowired
-    UserController userController;
-    @Autowired
     UserRepository userRepository;
+    @Autowired
+    TaskRepository taskRepository;
+    @Autowired
+    UserController userController;
     @Autowired
     UserService userService;
     @Autowired
@@ -42,23 +50,38 @@ class ReviewRepositoryTest {
     @Transactional
     @Commit
     public void 리뷰_생성() {
-        //given
         User user = new User("whdghrkwhr12@naver.com", "최종호", "01085738206");
-        userRepository.save(user);
-        entityManager.flush();
+        entityManager.persist(user);
 
-//        TaskAbility taskAbility = new TaskAbility(user,"디자인", "편집 디자인");
-//        entityManager.persist(taskAbility);
-//        TaskAbility taskAbility2 = new TaskAbility(user, "기획력", "컨텐츠기획");
-//        entityManager.persist(taskAbility2);
-        PossibleTask possibleTask = new PossibleTask(user, "업무", "워드");
-        entityManager.persist(possibleTask);
-        entityManager.flush();
+        User irumi = new User("email@irumi.com","이루미1", "01011111111");
+        entityManager.persist(irumi);
 
-        //when
-        List<PossibleTask> list = user.getPossibleTaskList();
+        User irumi2 = new User("email2@irumi2.com", "이루미2", "01022222222");
+        entityManager.persist(irumi2);
 
-        //then
-        assertEquals(1, list.size());
+        User irumi3 = new User("email3@irumi3.com", "이루미3", "01033333333");
+        entityManager.persist(irumi3);
+
+        Task task = new Task(user, "번역 업무", "영어 번역", "문서 작업", "워드스킬");
+        taskRepository.save(task);
+
+        TaskUserMapping taskUserMapping = new TaskUserMapping(irumi,task);
+        entityManager.persist(taskUserMapping);
+
+        TaskUserMapping taskUserMapping2 = new TaskUserMapping(irumi2,task);
+        entityManager.persist(taskUserMapping2);
+
+        TaskUserMapping taskUserMapping3 = new TaskUserMapping(irumi3,task);
+        entityManager.persist(taskUserMapping3);
+
+        RelatedAbility relatedAbility = new RelatedAbility(task,"문서번역", "영어문서번역");
+        entityManager.persist(relatedAbility);
+
+        task.addIrumiList(taskUserMapping);
+        task.addIrumiList(taskUserMapping2);
+        task.addIrumiList(taskUserMapping3);
+        task.addRelatedAbilityList(relatedAbility);
+
+//        Rating rating = new Rating();
     }
 }

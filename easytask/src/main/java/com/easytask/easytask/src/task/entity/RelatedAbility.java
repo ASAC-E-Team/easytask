@@ -16,7 +16,7 @@ import javax.persistence.*;
 public class RelatedAbility extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false, updatable = false)
+    @Column(name = "relatedAbilityId",nullable = false, updatable = false)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -26,4 +26,11 @@ public class RelatedAbility extends BaseEntity {
     private String categoryBig;
 
     private String categorySmall;
+
+    public RelatedAbility(Task task, String categoryBig, String categorySmall) {
+        this.task = task;
+        this.categoryBig = categoryBig;
+        this.categorySmall = categorySmall;
+    }
+
 }

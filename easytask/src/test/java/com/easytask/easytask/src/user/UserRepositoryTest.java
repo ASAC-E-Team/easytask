@@ -30,7 +30,6 @@ class UserRepositoryTest {
 
     @Test
     @Transactional
-    @Commit
     public void 유저_가능업무_조회() {
         //given
         User user = new User("whdghrkwhr12@naver.com", "최종호", "01085738206");

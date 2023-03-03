@@ -4,11 +4,14 @@ import com.easytask.easytask.common.BaseEntity;
 import com.easytask.easytask.src.task.entity.Task;
 import com.easytask.easytask.src.task.entity.TaskUserMapping;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -22,22 +25,25 @@ public class Review extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "taskId")
     private Task task;
-    @OneToOne(fetch = FetchType.LAZY)
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "taskUserMappingId")
     private TaskUserMapping taskUserMapping;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ratingId")
-    private Rating rating;
+    @OneToMany(mappedBy = "review")
+    private List<Rating> ratingList = new ArrayList<>();
     private String context;
-    @Column(name = "createAt")
-    private LocalDateTime localDateTime;
 
-    public Review(Task task, TaskUserMapping taskUserMapping, Rating rating, String context) {
+    @Builder
+    public Review(Task task, TaskUserMapping taskUserMapping, String context) {
         this.task = task;
         this.taskUserMapping = taskUserMapping;
-        this.rating = rating;
         this.context = context;
     }
+
+    public void addRatingList(Rating rating) {
+        ratingList.add(rating);
+    }
+
 
 }
