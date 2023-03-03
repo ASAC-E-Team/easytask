@@ -1,6 +1,7 @@
 package com.easytask.easytask.src.task;
 
 import com.easytask.easytask.common.exception.BaseException;
+import com.easytask.easytask.common.scheduler.MatchingRequest;
 import com.easytask.easytask.src.task.dto.request.RelatedAbilityRequestDto;
 import com.easytask.easytask.src.task.dto.response.RelatedAbilityResponseDto;
 import com.easytask.easytask.src.task.dto.response.TaskResponseDto;
@@ -34,6 +35,7 @@ public class TaskService {
     private final RelatedAbilityRepository relatedAbilityRepository;
     private final TaskUserMappingRepository mappingRepository;
     private final UserRepository userRepository;
+    private final MatchingRequest matchingRequest;
 
     public TaskIdResponseDto createTask(Long customerId, TaskRequestDto taskRequestDto) {
         User customer = userRepository.findByIdAndState(customerId, ACTIVE)
@@ -146,6 +148,7 @@ public class TaskService {
 
         try {
             task.updateMatchingStatusToMatching();
+            matchingRequest.addTask(task);
         } catch (Exception exception) {
             throw new BaseException(DB_CONNECTION_ERROR);
         }
