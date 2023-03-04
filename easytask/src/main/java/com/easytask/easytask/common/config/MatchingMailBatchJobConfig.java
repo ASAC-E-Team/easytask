@@ -20,6 +20,7 @@ import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -36,6 +37,7 @@ public class MatchingMailBatchJobConfig {
     private final StepBuilderFactory stepBuilderFactory;
     private final MatchingRequest matchingRequest;
     private final DataSource dataSource;
+    private final ApplicationContext applicationContext;
     private final TaskMailRepository taskMailRepository;
     private int CHUNK_SIZE=20;
 
@@ -66,11 +68,14 @@ public class MatchingMailBatchJobConfig {
         List<RelatedAbility> relatedAbilityList = task.getRelatedAbilityList();
 
         Map<String, Object> parameterValues = new HashMap<>();
+        parameterValues.put("taskId", task.getId());
+        parameterValues.put("taskCategorySmall", task.getCategorySmall());
         parameterValues.put("relatedAbilityList", relatedAbilityList);
+        parameterValues.put("abilityCount", relatedAbilityList.size());
 
         return new MyBatisPagingItemReaderBuilder<User>()
                 .sqlSessionFactory(sqlSessionFactory().getObject())
-                .queryId("com.easytask.easytask.src.user.mapper.UserMapper.findUserOnMatchingMailBatch")
+                .queryId("UserMapper.findUserOnMatchingMailBatch")
                 .parameterValues(parameterValues)
                 .pageSize(CHUNK_SIZE)
                 .build();
@@ -82,6 +87,8 @@ public class MatchingMailBatchJobConfig {
         return new ItemProcessor<User, TaskMail>() {
             @Override
             public TaskMail process(User irumi) throws Exception {
+                System.out.println(irumi.toString());
+
                 Task task = matchingRequest.getScheduledTask();
 
                 return TaskMail.builder()
@@ -102,6 +109,7 @@ public class MatchingMailBatchJobConfig {
     public SqlSessionFactoryBean sqlSessionFactory() throws Exception {
         SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
         sessionFactory.setDataSource(dataSource);
+        sessionFactory.setMapperLocations(applicationContext.getResources("classpath:mybatis/mapper/*.xml"));
         return sessionFactory;
     }
 }

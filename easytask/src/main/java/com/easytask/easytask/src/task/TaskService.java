@@ -141,7 +141,7 @@ public class TaskService {
         Optional.ofNullable(task.getDetails())
                 .orElseThrow(() -> new BaseException(BAD_REQUEST_NO_DETAILS));
 
-        List<RelatedAbility> relatedAbilityList = relatedAbilityRepository.findAllByTaskIdAndState(taskId, ACTIVE);
+        List<RelatedAbility> relatedAbilityList = task.getRelatedAbilityList();
         if (relatedAbilityList.isEmpty()) {
             throw new BaseException(BAD_REQUEST_NO_RELATED_ABILITY);
         }
