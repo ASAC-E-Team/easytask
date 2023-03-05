@@ -14,10 +14,11 @@ import javax.annotation.PostConstruct;
 @RequiredArgsConstructor
 public class InitDB {
     private final InitService initService;
-    @PostConstruct
-    public void init(){
-        initService.initUser();
-    }
+
+//    @PostConstruct
+//    public void init(){
+//        initService.initUser();
+//    }
 
     @Component
     @Transactional

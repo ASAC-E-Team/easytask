@@ -11,10 +11,12 @@ import com.easytask.easytask.src.user.dto.responseDto.PossibleTaskResponseDto;
 import com.easytask.easytask.src.user.dto.responseDto.TaskAbilityResponseDto;
 import com.easytask.easytask.src.user.dto.responseDto.UserResponseDto;
 import com.easytask.easytask.src.user.entity.User;
+import com.easytask.easytask.src.user.login.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -26,10 +28,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
+import static com.easytask.easytask.common.jwt.JwtFilter.AUTHORIZATION_HEADER;
 import static com.easytask.easytask.common.response.BaseResponseStatus.NOT_FIND_USER;
 import static com.easytask.easytask.common.response.BaseResponseStatus.NOT_VALID_EMAIL;
 
@@ -39,31 +45,22 @@ import static com.easytask.easytask.common.response.BaseResponseStatus.NOT_VALID
 @RequestMapping("/easytask/user")
 public class UserController {
     private final UserService userService;
+    private final RedisUtil redisUtil;
 
-    private final TokenProvider tokenProvider;
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    @PostMapping("/logout")
+    public BaseResponse<String> logout(ServletRequest servletRequest){
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
+        String bearerToken = request.getHeader(AUTHORIZATION_HEADER).substring(7);
+        redisUtil.setDataExpire(bearerToken,"logout",1800); //레디스에 userEmail(key), 토큰 값(value), 만료시간 설정 후 저장
+        return new BaseResponse<>("로그아웃 되었습니다.");
+    }
 
     @PostMapping("/login")
     public BaseResponse<String> login(@RequestBody UserLoginDto loginDto) {
-        try{
-            UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
-
-            Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            String jwt = tokenProvider.createToken(authentication);
-            HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
-
-            System.out.println("jwt = " + jwt);
-            return new BaseResponse<>(jwt);
-
-        } catch (Exception e){
-            throw new BaseException(NOT_FIND_USER);
-        }
+        String jwt = userService.login(loginDto);
+        return new BaseResponse<>(jwt);
     }
+
     @PostMapping("/sign-up")
     public BaseResponse<UserResponseDto> registerUser(
             @Valid @RequestBody UserRequestDto requestDto){

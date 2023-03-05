@@ -36,6 +36,7 @@ public class TokenProvider implements InitializingBean { //토큰의 생성 및 
             @Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds) {
         this.secret = secret;
         this.tokenValidityInMilliseconds = tokenValidityInSeconds * 1000;
+        //시간 관련 메소드는 밀리초(millisecond) 단위의 값을 받기 때문에 *1000
     }
 
     @Override

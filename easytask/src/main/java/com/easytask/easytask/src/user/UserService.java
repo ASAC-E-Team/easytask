@@ -1,15 +1,25 @@
 package com.easytask.easytask.src.user;
 
 import com.easytask.easytask.common.exception.BaseException;
+import com.easytask.easytask.common.jwt.TokenProvider;
+import com.easytask.easytask.common.response.BaseResponse;
+import com.easytask.easytask.src.user.dto.requestDto.UserLoginDto;
 import com.easytask.easytask.src.user.dto.requestDto.UserRequestDto;
 import com.easytask.easytask.src.user.dto.responseDto.UserResponseDto;
 import com.easytask.easytask.src.user.entity.PossibleTask;
 import com.easytask.easytask.src.user.entity.Role;
 import com.easytask.easytask.src.user.entity.TaskAbility;
 import com.easytask.easytask.src.user.entity.User;
+import com.easytask.easytask.src.user.login.RedisUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import static com.easytask.easytask.common.jwt.JwtFilter.AUTHORIZATION_HEADER;
 import static com.easytask.easytask.common.response.BaseResponseStatus.*;
 
 @Transactional
@@ -25,8 +36,35 @@ import static com.easytask.easytask.common.response.BaseResponseStatus.*;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final TokenProvider tokenProvider;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     private final PasswordEncoder passwordEncoder;
+
+
+
+
+    public String login(UserLoginDto loginDto) {
+        try{
+            UsernamePasswordAuthenticationToken authenticationToken =
+                    new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
+
+            Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            String jwt = tokenProvider.createToken(authentication);
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.add(AUTHORIZATION_HEADER, "Bearer " + jwt);
+
+
+            System.out.println("jwt = " + jwt);
+            return jwt;
+        } catch (Exception e){
+            throw new BaseException(NOT_FIND_USER);
+        }
+    }
+
 
     public UserResponseDto registerUser(UserRequestDto requestDto) {
         if(userRepository.existsByEmail(requestDto.getEmail())){
@@ -66,6 +104,7 @@ public class UserService {
                 .orElseThrow(()-> new BaseException(NOT_FIND_USER));
         requestDto.setPassword(passwordEncoder.encode(requestDto.getPassword()));
         user.updateUser(requestDto);
+
     }
 
 
@@ -84,5 +123,7 @@ public class UserService {
         }
         return userResponseDtoList;
     }
+
+
 }
 

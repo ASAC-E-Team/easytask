@@ -4,6 +4,7 @@ import com.easytask.easytask.common.jwt.JwtAuthenticationEntryPoint;
 import com.easytask.easytask.common.jwt.JwtSecurityConfig;
 import com.easytask.easytask.common.jwt.TokenProvider;
 
+import com.easytask.easytask.src.user.login.RedisUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -21,6 +22,8 @@ public class SecurityConfig{
     private final TokenProvider tokenProvider;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+    private final RedisUtil redisUtil;
+
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
@@ -30,14 +33,12 @@ public class SecurityConfig{
     public SecurityConfig(
             TokenProvider tokenProvider,
             JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
-            JwtAccessDeniedHandler jwtAccessDeniedHandler
-    ) {
+            JwtAccessDeniedHandler jwtAccessDeniedHandler,
+            RedisUtil redisUtil) {
         this.tokenProvider = tokenProvider;
         this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
         this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
-
-
-
+        this.redisUtil = redisUtil;
     }
 
 
@@ -57,11 +58,11 @@ public class SecurityConfig{
 
                 .and()
                 .authorizeHttpRequests()//HttpServletRequest를 사용하는 요청들에 대한 접근체한을 설정
-                .antMatchers("/","/easytask/user/**","/easytask/user/sign-up").permitAll() //  여기서 설정한 url에 대한 요청은 인증없이 접근을 허용하겠다는 의미
+                .antMatchers("/","/easytask/user/login","/easytask/user/sign-up").permitAll() //  여기서 설정한 url에 대한 요청은 인증없이 접근을 허용하겠다는 의미
                 .anyRequest().authenticated() //그 이외 나머지 요청들은 모두 인증되어야 한다.
 
                 .and()
-                .apply(new JwtSecurityConfig(tokenProvider)); //생성자 주입을 통해 JwtFilter 를 SecurityConfig 에 적용
+                .apply(new JwtSecurityConfig(tokenProvider,redisUtil)); //생성자 주입을 통해 JwtFilter 와 redisUtil 를 SecurityConfig 에 적용
 
         return http.build();
 
