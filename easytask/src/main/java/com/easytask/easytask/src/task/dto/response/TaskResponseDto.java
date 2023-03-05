@@ -44,6 +44,16 @@ public class TaskResponseDto {
                 ).collect(Collectors.toList());
     }
 
+    public TaskResponseDto(Task task) {
+        this.taskId = task.getId();
+        this.taskName = task.getTaskName();
+        this.details = task.getDetails();
+        this.categoryBig = task.getCategoryBig();
+        this.categorySmall = task.getCategorySmall();
+        this.numberOfIrumi = task.getNumberOfIrumi();
+        this.matchingStatus = task.getMatchingStatus().name();
+    }
+
     @Getter
     @Setter
     @AllArgsConstructor

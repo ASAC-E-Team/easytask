@@ -3,6 +3,7 @@ package com.easytask.easytask.src.task;
 import com.easytask.easytask.common.response.BaseResponse;
 import com.easytask.easytask.src.task.dto.request.RelatedAbilityRequestDto;
 import com.easytask.easytask.src.task.dto.response.RelatedAbilityResponseDto;
+import com.easytask.easytask.src.task.dto.response.TaskPageResponseDto;
 import com.easytask.easytask.src.task.dto.response.TaskResponseDto;
 import com.easytask.easytask.src.task.dto.request.TaskRequestDto;
 import com.easytask.easytask.src.task.dto.response.TaskIdResponseDto;
@@ -92,5 +93,21 @@ public class TaskController {
             @PathVariable("taskId") Long taskId, @PathVariable("irumiId") Long irumiId) {
         taskService.updateTaskToDone(taskId, irumiId);
         return new BaseResponse<>("업무를 완료했습니다.");
+    }
+
+    @ResponseBody
+    @GetMapping("/customers/{customerId}/mytask")
+    public BaseResponse<TaskPageResponseDto> getCustomerMyTaskList(
+            @PathVariable("customerId") Long customerId, @RequestParam Integer page, @RequestParam Integer size) {
+        TaskPageResponseDto taskPageResponseDto = taskService.getCustomerMyTaskList(customerId, page, size);
+        return new BaseResponse<>(taskPageResponseDto);
+    }
+
+    @ResponseBody
+    @GetMapping("/irumies/{irumiId}/mytask")
+    public BaseResponse<TaskPageResponseDto> getIrumiMyTaskList(
+            @PathVariable("irumiId") Long irumiId, @RequestParam Integer page, @RequestParam Integer size) {
+        TaskPageResponseDto taskPageResponseDto = taskService.getIrumiMyTaskList(irumiId, page, size);
+        return new BaseResponse<>(taskPageResponseDto);
     }
 }

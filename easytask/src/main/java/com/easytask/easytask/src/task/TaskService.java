@@ -6,6 +6,7 @@ import com.easytask.easytask.common.util.MailGenerator;
 import com.easytask.easytask.common.util.MailService;
 import com.easytask.easytask.src.task.dto.request.RelatedAbilityRequestDto;
 import com.easytask.easytask.src.task.dto.response.RelatedAbilityResponseDto;
+import com.easytask.easytask.src.task.dto.response.TaskPageResponseDto;
 import com.easytask.easytask.src.task.dto.response.TaskResponseDto;
 import com.easytask.easytask.src.task.dto.request.TaskRequestDto;
 import com.easytask.easytask.src.task.dto.response.TaskIdResponseDto;
@@ -21,6 +22,9 @@ import com.easytask.easytask.src.user.UserRepository;
 import com.easytask.easytask.src.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,6 +70,7 @@ public class TaskService {
         }
     }
 
+    @Transactional(readOnly = true)
     public TaskResponseDto getTask(Long taskId) {
         Task task = taskRepository.findByIdAndState(taskId, ACTIVE)
                 .orElseThrow(() -> new BaseException(NOT_FOUND_TASK));
@@ -257,5 +262,34 @@ public class TaskService {
             }
         }
         throw new BaseException(NOT_FOUND_MATCHING);
+    }
+
+    @Transactional(readOnly = true)
+    public TaskPageResponseDto getCustomerMyTaskList(Long customerId, Integer page, Integer size) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Order.desc("updatedAt")));
+        Page<Task> taskPage = taskRepository.findByCustomerIdAndState(customerId, ACTIVE, pageRequest)
+                .orElseThrow(() -> new BaseException(NOT_FOUND_TASK));
+        try {
+            Page<TaskResponseDto> taskResponseDtoPage = taskPage.map(TaskResponseDto::new);
+            return new TaskPageResponseDto(taskResponseDtoPage);
+        } catch (Exception exception) {
+            throw new BaseException(DB_CONNECTION_ERROR);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public TaskPageResponseDto getIrumiMyTaskList(Long irumiId, Integer page, Integer size) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by(Sort.Order.desc("updatedAt")));
+        Page<TaskUserMapping> taskUserMappingPage = mappingRepository.findWithTaskByIrumiIdAndState(irumiId, ACTIVE, pageRequest)
+                .orElseThrow(() -> new BaseException(NOT_FOUND_TASK));
+        try {
+            Page<TaskResponseDto> taskResponseDtoPage = taskUserMappingPage.map(taskUserMapping -> {
+                Task task = taskUserMapping.getTask();
+                return new TaskResponseDto(task);
+            });
+            return new TaskPageResponseDto(taskResponseDtoPage);
+        } catch (Exception exception) {
+            throw new BaseException(DB_CONNECTION_ERROR);
+        }
     }
 }
