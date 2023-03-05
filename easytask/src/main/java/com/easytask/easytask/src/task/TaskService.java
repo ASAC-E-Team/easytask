@@ -155,7 +155,7 @@ public class TaskService {
         }
 
         try {
-            task.updateMatchingStatusToMatching();
+            task.updateMatchingStatus(Task.MatchingStatus.NOT_MATCHED);
             matchingRequest.addTask(task);
         } catch (Exception exception) {
             throw new BaseException(DB_CONNECTION_ERROR);
@@ -186,7 +186,7 @@ public class TaskService {
 
             if (checkMatchingIsOver(matchedCount + 1, needCount)) {
                 matchingRequest.removeTask(taskId);
-                task.updateMatchingStatusToMatched();
+                task.updateMatchingStatus(Task.MatchingStatus.NOT_STARTED);
                 // 고객에게 매칭 완료 메일 전송
             }
             return;

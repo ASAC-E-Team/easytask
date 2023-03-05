@@ -59,14 +59,6 @@ public class Task extends BaseEntity {
         this.state = State.INACTIVE;
     }
 
-    public void updateMatchingStatusToMatching() {
-        this.matchingStatus = MatchingStatus.NOT_MATCHED;
-    }
-
-    public void updateMatchingStatusToMatched() {
-        this.matchingStatus = MatchingStatus.NOT_STARTED;
-    }
-
     public void updateMatchingStatus(MatchingStatus matchingStatus) {
         this.matchingStatus = matchingStatus;
     }
