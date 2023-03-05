@@ -2,6 +2,8 @@ package com.easytask.easytask.src.task;
 
 import com.easytask.easytask.common.exception.BaseException;
 import com.easytask.easytask.common.scheduler.MatchingRequest;
+import com.easytask.easytask.common.util.MailGenerator;
+import com.easytask.easytask.common.util.MailService;
 import com.easytask.easytask.src.task.dto.request.RelatedAbilityRequestDto;
 import com.easytask.easytask.src.task.dto.response.RelatedAbilityResponseDto;
 import com.easytask.easytask.src.task.dto.response.TaskResponseDto;
@@ -40,6 +42,7 @@ public class TaskService {
     private final TaskUserMappingRepository mappingRepository;
     private final UserRepository userRepository;
     private final MatchingRequest matchingRequest;
+    private final MailService mailService;
 
     public TaskIdResponseDto createTask(Long customerId, TaskRequestDto taskRequestDto) {
         User customer = userRepository.findByIdAndState(customerId, ACTIVE)
@@ -136,7 +139,7 @@ public class TaskService {
     }
 
     public void updateTaskToMatching(Long taskId) {
-        Task task = taskRepository.findByIdAndState(taskId, ACTIVE)
+        Task task = taskRepository.findWithUserByIdAndState(taskId, ACTIVE)
                 .orElseThrow(() -> new BaseException(NOT_FOUND_TASK));
         Optional.ofNullable(task.getTaskName())
                 .orElseThrow(() -> new BaseException(BAD_REQUEST_NO_TASK_NAME));
@@ -155,8 +158,10 @@ public class TaskService {
         }
 
         try {
+            User customer = task.getCustomer();
             task.updateMatchingStatus(Task.MatchingStatus.NOT_MATCHED);
             matchingRequest.addTask(task);
+            mailService.sendMatchingMail(new MailGenerator().createMatchingMail(task, customer));
         } catch (Exception exception) {
             throw new BaseException(DB_CONNECTION_ERROR);
         }
@@ -169,12 +174,12 @@ public class TaskService {
         try {
             Task task = taskMail.getTask();
             User irumi = taskMail.getIrumi();
+            User customer = task.getCustomer();
 
             Integer needCount = task.getNumberOfIrumi();
             Integer matchedCount = task.getIrumiList().size();
             if (checkMatchingIsOver(matchedCount, needCount)) {
-                // 이루미에게 매칭 요청이 완료되어 매칭 실패를 알리는 메일 전송
-                return;
+                throw new BaseException(BAD_REQUEST_ALREADY_MATCHED);
             }
             taskMail.updateMailingStatusToAgree();
 
@@ -187,9 +192,8 @@ public class TaskService {
             if (checkMatchingIsOver(matchedCount + 1, needCount)) {
                 matchingRequest.removeTask(taskId);
                 task.updateMatchingStatus(Task.MatchingStatus.NOT_STARTED);
-                // 고객에게 매칭 완료 메일 전송
+                mailService.sendMatchingMail(new MailGenerator().createMatchedMail(task, customer));
             }
-            return;
         } catch (Exception exception) {
             throw new BaseException(DB_CONNECTION_ERROR);
         }
@@ -217,13 +221,15 @@ public class TaskService {
     }
 
     public void updateTaskToDone(Long taskId, Long irumiId) {
-        Task task = taskRepository.findWithMappingByIdAndState(taskId, ACTIVE)
+        Task task = taskRepository.findWithMappingAndCustomerByIdAndState(taskId, ACTIVE)
                 .orElseThrow(() -> new BaseException(NOT_FOUND_TASK));
+        User customer = task.getCustomer();
         try {
             List<TaskUserMapping> irumiList = task.getIrumiList();
             updateProgressStatus(irumiId, irumiList, DONE);
             if (checkAllIrumiesProgressStatus(irumiList, DONE)) {
                 task.updateMatchingStatus(Task.MatchingStatus.DONE);
+                mailService.sendMatchingMail(new MailGenerator().createTaskDoneMail(task, customer));
             }
         } catch (Exception exception) {
             throw new BaseException(DB_CONNECTION_ERROR);

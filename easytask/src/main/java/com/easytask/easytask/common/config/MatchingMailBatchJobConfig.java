@@ -1,6 +1,8 @@
 package com.easytask.easytask.common.config;
 
 import com.easytask.easytask.common.scheduler.MatchingRequest;
+import com.easytask.easytask.common.util.MailService;
+import com.easytask.easytask.common.util.MailGenerator;
 import com.easytask.easytask.src.task.entity.RelatedAbility;
 import com.easytask.easytask.src.task.entity.Task;
 import com.easytask.easytask.src.task.entity.TaskMail;
@@ -39,6 +41,7 @@ public class MatchingMailBatchJobConfig {
     private final DataSource dataSource;
     private final ApplicationContext applicationContext;
     private final TaskMailRepository taskMailRepository;
+    private final MailService mailService;
     private int CHUNK_SIZE=20;
 
     @Bean
@@ -87,9 +90,9 @@ public class MatchingMailBatchJobConfig {
         return new ItemProcessor<User, TaskMail>() {
             @Override
             public TaskMail process(User irumi) throws Exception {
-                System.out.println(irumi.toString());
-
                 Task task = matchingRequest.getScheduledTask();
+
+                mailService.sendMatchingMail(new MailGenerator().createMatchingInvitation(task, irumi));
 
                 return TaskMail.builder()
                         .irumi(irumi)

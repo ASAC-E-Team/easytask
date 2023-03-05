@@ -12,4 +12,10 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
     @EntityGraph(attributePaths = {"irumiList"})
     Optional<Task> findWithMappingByIdAndState(Long taskId, BaseEntity.State active);
+
+    @EntityGraph(attributePaths = {"customer"})
+    Optional<Task> findWithUserByIdAndState(Long taskId, BaseEntity.State active);
+
+    @EntityGraph(attributePaths = {"irumiList", "customer"})
+    Optional<Task> findWithMappingAndCustomerByIdAndState(Long taskId, BaseEntity.State active);
 }
