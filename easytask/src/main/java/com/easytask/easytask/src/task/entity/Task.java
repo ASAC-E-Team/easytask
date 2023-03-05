@@ -2,10 +2,7 @@ package com.easytask.easytask.src.task.entity;
 
 import com.easytask.easytask.common.BaseEntity;
 import com.easytask.easytask.src.user.entity.User;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -46,6 +43,7 @@ public class Task extends BaseEntity {
         NOT_MATCHED, NOT_STARTED, DOING, DONE
     }
 
+    @Builder
     public Task(User user, String taskName, String details, String categoryBig, String categorySmall) {
         customer = user;
         this.taskName = taskName;
@@ -60,5 +58,9 @@ public class Task extends BaseEntity {
 
     public void addRelatedAbilityList(RelatedAbility relatedAbility) {
         relatedAbilityList.add(relatedAbility);
+    }
+
+    public void setCustomer(User customer) {
+        this.customer = customer;
     }
 }

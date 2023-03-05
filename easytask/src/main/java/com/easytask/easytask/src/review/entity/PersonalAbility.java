@@ -23,3 +23,4 @@ public class PersonalAbility extends BaseEntity {
         this.personalAbility = personalAbility;
     }
 }
+ 

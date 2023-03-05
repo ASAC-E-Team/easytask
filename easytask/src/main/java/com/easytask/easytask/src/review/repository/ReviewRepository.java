@@ -23,12 +23,19 @@ public class ReviewRepository {
     }
 
     public List<Review> getReviewsByUserId(Long userId) {
-        return entityManger.createQuery("select r from Review r join r.task t join t.customer u where u.userId = :userId", Review.class)
+        return entityManger.createQuery("select r from Review r join r.task t join t.customer u where u.id = :userId", Review.class)
                 .setParameter("userId", userId).getResultList();
+    }
+
+    public List<Review> getReviewsByIrumiId(Long irumiId) {
+        return entityManger.createQuery("select r from Review r join r.taskUserMapping t join t.irumi u where u.id = :irumiId", Review.class)
+                .setParameter("irumiId", irumiId).getResultList();
     }
 
     public Review findOne(Long reviewId) {
         return entityManger.find(Review.class, reviewId);
     }
+
+
 
 }
