@@ -27,6 +27,10 @@ public class TaskUserMapping extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ProgressStatus progressStatus = ProgressStatus.STANDBY;
 
+    public void updateProgressStatus(ProgressStatus progressStatus) {
+        this.progressStatus = progressStatus;
+    }
+
     public enum ProgressStatus {
         STANDBY, DOING, DONE
     }

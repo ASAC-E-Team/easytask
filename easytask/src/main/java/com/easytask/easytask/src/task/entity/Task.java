@@ -39,7 +39,7 @@ public class Task extends BaseEntity {
     private Integer numberOfIrumi;
 
     @OneToMany(mappedBy = "task", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<TaskUserMapping> IrumiList = new ArrayList<>();
+    private List<TaskUserMapping> irumiList = new ArrayList<>();
 
     @OneToMany(mappedBy = "task", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<RelatedAbility> relatedAbilityList = new ArrayList<>();
@@ -65,6 +65,10 @@ public class Task extends BaseEntity {
 
     public void updateMatchingStatusToMatched() {
         this.matchingStatus = MatchingStatus.NOT_STARTED;
+    }
+
+    public void updateMatchingStatus(MatchingStatus matchingStatus) {
+        this.matchingStatus = matchingStatus;
     }
 
     public enum MatchingStatus {

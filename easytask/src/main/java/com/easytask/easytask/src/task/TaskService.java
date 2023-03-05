@@ -27,6 +27,7 @@ import java.util.Optional;
 
 import static com.easytask.easytask.common.BaseEntity.State.ACTIVE;
 import static com.easytask.easytask.common.response.BaseResponseStatus.*;
+import static com.easytask.easytask.src.task.entity.TaskUserMapping.ProgressStatus.*;
 
 @Slf4j
 @Transactional
@@ -164,7 +165,7 @@ public class TaskService {
     public void updateTaskToMatched(Long taskId, Long irumiId) {
         TaskMail taskMail = taskMailRepository
                 .findWithTaskAndIrumiByTaskIdAndIrumiIdAndState(taskId, irumiId, ACTIVE)
-                .orElseThrow(() -> new BaseException(BAD_REQUEST_NO_TAKSMAIL));
+                .orElseThrow(() -> new BaseException(NOT_FOUND_TAKSMAIL));
         try {
             Task task = taskMail.getTask();
             User irumi = taskMail.getIrumi();
@@ -199,5 +200,56 @@ public class TaskService {
             return true;
         }
         return false;
+    }
+
+    public void updateTaskToDoing(Long taskId, Long irumiId) {
+        Task task = taskRepository.findWithMappingByIdAndState(taskId, ACTIVE)
+                .orElseThrow(() -> new BaseException(NOT_FOUND_TASK));
+        try {
+            List<TaskUserMapping> irumiList = task.getIrumiList();
+            updateProgressStatus(irumiId, irumiList, DOING);
+            if (checkAllIrumiesProgressStatus(irumiList, DOING)) {
+                task.updateMatchingStatus(Task.MatchingStatus.DOING);
+            }
+        } catch (Exception exception) {
+            throw new BaseException(DB_CONNECTION_ERROR);
+        }
+    }
+
+    public void updateTaskToDone(Long taskId, Long irumiId) {
+        Task task = taskRepository.findWithMappingByIdAndState(taskId, ACTIVE)
+                .orElseThrow(() -> new BaseException(NOT_FOUND_TASK));
+        try {
+            List<TaskUserMapping> irumiList = task.getIrumiList();
+            updateProgressStatus(irumiId, irumiList, DONE);
+            if (checkAllIrumiesProgressStatus(irumiList, DONE)) {
+                task.updateMatchingStatus(Task.MatchingStatus.DONE);
+            }
+        } catch (Exception exception) {
+            throw new BaseException(DB_CONNECTION_ERROR);
+        }
+    }
+
+    private Boolean checkAllIrumiesProgressStatus(
+            List<TaskUserMapping> irumiList, TaskUserMapping.ProgressStatus progressStatus) {
+        int doingCount = 0;
+        for (TaskUserMapping taskUserMapping : irumiList) {
+            if (taskUserMapping.getProgressStatus() != progressStatus) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private void updateProgressStatus(
+            Long irumiId, List<TaskUserMapping> irumiList, TaskUserMapping.ProgressStatus progressStatus) {
+        for (TaskUserMapping taskUserMapping : irumiList) {
+            User irumi = taskUserMapping.getIrumi();
+            if (irumi.getId() == irumiId) {
+                taskUserMapping.updateProgressStatus(progressStatus);
+                return;
+            }
+        }
+        throw new BaseException(NOT_FOUND_MATCHING);
     }
 }

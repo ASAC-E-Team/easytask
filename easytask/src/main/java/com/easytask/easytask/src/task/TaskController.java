@@ -77,4 +77,20 @@ public class TaskController {
         taskService.updateTaskToMatched(taskId, irumiId);
         return new BaseResponse<>("해당 업무와 매칭 되었습니다.");
     }
+
+    @ResponseBody
+    @PatchMapping("{taskId}/irumies/{irumiId}/doing")
+    public BaseResponse<String> updateTaskToDoing(
+            @PathVariable("taskId") Long taskId, @PathVariable("irumiId") Long irumiId) {
+        taskService.updateTaskToDoing(taskId, irumiId);
+        return new BaseResponse<>("업무를 시작했습니다.");
+    }
+
+    @ResponseBody
+    @PatchMapping("{taskId}/irumies/{irumiId}/done")
+    public BaseResponse<String> updateTaskToDone(
+            @PathVariable("taskId") Long taskId, @PathVariable("irumiId") Long irumiId) {
+        taskService.updateTaskToDone(taskId, irumiId);
+        return new BaseResponse<>("업무를 완료했습니다.");
+    }
 }
