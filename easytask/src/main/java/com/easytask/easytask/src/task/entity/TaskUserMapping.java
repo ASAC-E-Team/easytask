@@ -24,6 +24,7 @@ public class TaskUserMapping extends BaseEntity {
     @JoinColumn(name = "taskId")
     private Task task;
 
+    @Enumerated(EnumType.STRING)
     private ProgressStatus progressStatus = ProgressStatus.STANDBY;
 
     public enum ProgressStatus {

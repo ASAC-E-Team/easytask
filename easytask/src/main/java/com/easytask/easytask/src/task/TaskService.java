@@ -9,8 +9,10 @@ import com.easytask.easytask.src.task.dto.request.TaskRequestDto;
 import com.easytask.easytask.src.task.dto.response.TaskIdResponseDto;
 import com.easytask.easytask.src.task.entity.RelatedAbility;
 import com.easytask.easytask.src.task.entity.Task;
+import com.easytask.easytask.src.task.entity.TaskMail;
 import com.easytask.easytask.src.task.entity.TaskUserMapping;
 import com.easytask.easytask.src.task.repository.RelatedAbilityRepository;
+import com.easytask.easytask.src.task.repository.TaskMailRepository;
 import com.easytask.easytask.src.task.repository.TaskRepository;
 import com.easytask.easytask.src.task.repository.TaskUserMappingRepository;
 import com.easytask.easytask.src.user.UserRepository;
@@ -33,6 +35,7 @@ import static com.easytask.easytask.common.response.BaseResponseStatus.*;
 public class TaskService {
     private final TaskRepository taskRepository;
     private final RelatedAbilityRepository relatedAbilityRepository;
+    private final TaskMailRepository taskMailRepository;
     private final TaskUserMappingRepository mappingRepository;
     private final UserRepository userRepository;
     private final MatchingRequest matchingRequest;
@@ -141,6 +144,10 @@ public class TaskService {
         Optional.ofNullable(task.getDetails())
                 .orElseThrow(() -> new BaseException(BAD_REQUEST_NO_DETAILS));
 
+        if (task.getMatchingStatus() != Task.MatchingStatus.STANDBY) {
+            throw new BaseException(BAD_REQUEST_ALREADY_QUEUED_MATCHING);
+        }
+
         List<RelatedAbility> relatedAbilityList = task.getRelatedAbilityList();
         if (relatedAbilityList.isEmpty()) {
             throw new BaseException(BAD_REQUEST_NO_RELATED_ABILITY);
@@ -152,5 +159,45 @@ public class TaskService {
         } catch (Exception exception) {
             throw new BaseException(DB_CONNECTION_ERROR);
         }
+    }
+
+    public void updateTaskToMatched(Long taskId, Long irumiId) {
+        TaskMail taskMail = taskMailRepository
+                .findWithTaskAndIrumiByTaskIdAndIrumiIdAndState(taskId, irumiId, ACTIVE)
+                .orElseThrow(() -> new BaseException(BAD_REQUEST_NO_TAKSMAIL));
+        try {
+            Task task = taskMail.getTask();
+            User irumi = taskMail.getIrumi();
+
+            Integer needCount = task.getNumberOfIrumi();
+            Integer matchedCount = task.getIrumiList().size();
+            if (checkMatchingIsOver(matchedCount, needCount)) {
+                // 이루미에게 매칭 요청이 완료되어 매칭 실패를 알리는 메일 전송
+                return;
+            }
+            taskMail.updateMailingStatusToAgree();
+
+            TaskUserMapping taskUserMapping = TaskUserMapping.builder()
+                    .task(task)
+                    .irumi(irumi)
+                    .build();
+            mappingRepository.save(taskUserMapping);
+
+            if (checkMatchingIsOver(matchedCount + 1, needCount)) {
+                matchingRequest.removeTask(taskId);
+                task.updateMatchingStatusToMatched();
+                // 고객에게 매칭 완료 메일 전송
+            }
+            return;
+        } catch (Exception exception) {
+            throw new BaseException(DB_CONNECTION_ERROR);
+        }
+    }
+
+    private Boolean checkMatchingIsOver(Integer matchedCount, Integer needCount) {
+        if (matchedCount == needCount) {
+            return true;
+        }
+        return false;
     }
 }

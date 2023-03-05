@@ -69,4 +69,12 @@ public class TaskController {
         taskService.updateTaskToMatching(taskId);
         return new BaseResponse<>("매칭 요청이 등록되었습니다.");
     }
+
+    @ResponseBody
+    @PatchMapping("{taskId}/irumies/{irumiId}/accept")
+    public BaseResponse<String> updateTaskToMatched(
+            @PathVariable("taskId") Long taskId, @PathVariable("irumiId") Long irumiId) {
+        taskService.updateTaskToMatched(taskId, irumiId);
+        return new BaseResponse<>("해당 업무와 매칭 되었습니다.");
+    }
 }

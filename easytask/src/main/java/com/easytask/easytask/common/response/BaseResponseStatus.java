@@ -24,6 +24,8 @@ public enum BaseResponseStatus {
     BAD_REQUEST_NO_TASK_NAME(false, HttpStatus.BAD_REQUEST.value(), "업무 제목을 입력해주세요."),
     BAD_REQUEST_NO_CATEGORY(false, HttpStatus.BAD_REQUEST.value(), "업무 분야를 선택해주세요."),
     BAD_REQUEST_NO_DETAILS(false, HttpStatus.BAD_REQUEST.value(), "업무 내용을 입력해주세요."),
+    BAD_REQUEST_NO_TAKSMAIL(false, HttpStatus.BAD_REQUEST.value(), "매칭 메일이 전송된 적이 없습니다."),
+    BAD_REQUEST_ALREADY_QUEUED_MATCHING(false, HttpStatus.BAD_REQUEST.value(), "이미 매칭 신청이 진행 중인 업무입니다."),
 
     /**
      * 500

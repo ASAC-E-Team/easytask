@@ -63,6 +63,10 @@ public class Task extends BaseEntity {
         this.matchingStatus = MatchingStatus.NOT_MATCHED;
     }
 
+    public void updateMatchingStatusToMatched() {
+        this.matchingStatus = MatchingStatus.NOT_STARTED;
+    }
+
     public enum MatchingStatus {
         STANDBY, NOT_MATCHED, NOT_STARTED, DOING, DONE
     }

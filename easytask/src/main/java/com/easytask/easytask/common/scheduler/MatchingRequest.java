@@ -19,7 +19,7 @@ public class MatchingRequest {
 
     public void addTask(Task task) {
         taskList.add(task);
-        log.info("add matchingRequest : {}", taskList.get(taskList.size()-1));
+        log.info("after add matchingRequest size : {}", taskList.size());
     }
 
     public Task getScheduledTask() {
@@ -28,5 +28,15 @@ public class MatchingRequest {
 
     public void moveIndex() {
         this.scheduledIndex = (scheduledIndex + 1) % taskList.size();
+    }
+
+    public void removeTask(Long taskId) {
+        for (Task task : taskList) {
+            if (task.getId() == taskId) {
+                taskList.remove(task);
+                log.info("after matchingRequest size : {}", taskList.size());
+                break;
+            }
+        }
     }
 }

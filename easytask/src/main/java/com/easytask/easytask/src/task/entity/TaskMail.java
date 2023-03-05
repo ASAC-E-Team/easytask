@@ -24,7 +24,12 @@ public class TaskMail extends BaseEntity {
     @JoinColumn(name = "taskId")
     private Task task;
 
+    @Enumerated(EnumType.STRING)
     private MailingStatus mailingStatus = MailingStatus.INVITED;
+
+    public void updateMailingStatusToAgree() {
+        this.mailingStatus = MailingStatus.AGREED;
+    }
 
     public enum MailingStatus {
         INVITED, AGREED
