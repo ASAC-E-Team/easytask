@@ -5,6 +5,8 @@ import com.easytask.easytask.common.exception.BaseException;
 
 import com.easytask.easytask.common.response.BaseResponseStatus;
 import static com.easytask.easytask.common.response.BaseResponseStatus.*;
+
+import com.easytask.easytask.src.review.dto.PostReviewRes;
 import com.easytask.easytask.src.review.entity.Review;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
