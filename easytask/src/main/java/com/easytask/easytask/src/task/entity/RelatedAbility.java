@@ -2,10 +2,7 @@ package com.easytask.easytask.src.task.entity;
 
 import com.easytask.easytask.common.BaseEntity;
 import com.easytask.easytask.src.user.entity.User;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -16,7 +13,7 @@ import javax.persistence.*;
 public class RelatedAbility extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false, updatable = false)
+    @Column(name = "relatedAbilityId",nullable = false, updatable = false)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -26,4 +23,15 @@ public class RelatedAbility extends BaseEntity {
     private String categoryBig;
 
     private String categorySmall;
+
+    @Builder
+    public RelatedAbility(Task task, String categoryBig, String categorySmall) {
+        this.task = task;
+        this.categoryBig = categoryBig;
+        this.categorySmall = categorySmall;
+    }
+
+    public void deleteRelatedAbility() {
+        this.state = State.INACTIVE;
+    }
 }

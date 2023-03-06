@@ -10,10 +10,10 @@ import javax.persistence.*;
 @Getter
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class TaskUserMapping extends BaseEntity {
+public class TaskMail extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "taskUserMappingId", nullable = false, updatable = false)
+    @Column(name = "taskMailId", nullable = false, updatable = false)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -25,18 +25,18 @@ public class TaskUserMapping extends BaseEntity {
     private Task task;
 
     @Enumerated(EnumType.STRING)
-    private ProgressStatus progressStatus = ProgressStatus.STANDBY;
+    private MailingStatus mailingStatus = MailingStatus.INVITED;
 
-    public void updateProgressStatus(ProgressStatus progressStatus) {
-        this.progressStatus = progressStatus;
+    public void updateMailingStatusToAgree() {
+        this.mailingStatus = MailingStatus.AGREED;
     }
 
-    public enum ProgressStatus {
-        STANDBY, DOING, DONE
+    public enum MailingStatus {
+        INVITED, AGREED
     }
 
     @Builder
-    public TaskUserMapping(User irumi, Task task) {
+    public TaskMail(User irumi, Task task) {
         this.irumi = irumi;
         this.task = task;
     }
