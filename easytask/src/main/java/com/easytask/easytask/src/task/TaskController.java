@@ -3,13 +3,14 @@ package com.easytask.easytask.src.task;
 import com.easytask.easytask.common.response.BaseResponse;
 import com.easytask.easytask.src.task.dto.request.RelatedAbilityRequestDto;
 import com.easytask.easytask.src.task.dto.response.RelatedAbilityResponseDto;
-import com.easytask.easytask.src.task.dto.response.TaskPageResponseDto;
 import com.easytask.easytask.src.task.dto.response.TaskResponseDto;
 import com.easytask.easytask.src.task.dto.request.TaskRequestDto;
 import com.easytask.easytask.src.task.dto.response.TaskIdResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -97,17 +98,17 @@ public class TaskController {
 
     @ResponseBody
     @GetMapping("/customers/{customerId}/mytask")
-    public BaseResponse<TaskPageResponseDto> getCustomerMyTaskList(
+    public BaseResponse<List<TaskResponseDto>> getCustomerMyTaskList(
             @PathVariable("customerId") Long customerId, @RequestParam Integer page, @RequestParam Integer size) {
-        TaskPageResponseDto taskPageResponseDto = taskService.getCustomerMyTaskList(customerId, page, size);
-        return new BaseResponse<>(taskPageResponseDto);
+        List<TaskResponseDto> taskResponseDtoList = taskService.getCustomerMyTaskList(customerId, page, size);
+        return new BaseResponse<>(taskResponseDtoList);
     }
 
     @ResponseBody
     @GetMapping("/irumies/{irumiId}/mytask")
-    public BaseResponse<TaskPageResponseDto> getIrumiMyTaskList(
+    public BaseResponse<List<TaskResponseDto>> getIrumiMyTaskList(
             @PathVariable("irumiId") Long irumiId, @RequestParam Integer page, @RequestParam Integer size) {
-        TaskPageResponseDto taskPageResponseDto = taskService.getIrumiMyTaskList(irumiId, page, size);
+        List<TaskResponseDto> taskPageResponseDto = taskService.getIrumiMyTaskList(irumiId, page, size);
         return new BaseResponse<>(taskPageResponseDto);
     }
 }
