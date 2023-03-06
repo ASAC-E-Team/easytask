@@ -2,6 +2,7 @@ package com.easytask.easytask.src.task.entity;
 
 import com.easytask.easytask.common.BaseEntity;
 import com.easytask.easytask.src.user.entity.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -20,6 +21,7 @@ public class Task extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
+    @JsonIgnore
     private User customer;
 
     private String taskName;
@@ -29,6 +31,8 @@ public class Task extends BaseEntity {
     private String categoryBig;
 
     private String categorySmall;
+
+//    private Integer numberOfIrumi;
 
     @OneToMany(mappedBy = "task", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<TaskUserMapping> IrumiList = new ArrayList<>();

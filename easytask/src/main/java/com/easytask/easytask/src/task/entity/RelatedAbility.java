@@ -2,10 +2,8 @@ package com.easytask.easytask.src.task.entity;
 
 import com.easytask.easytask.common.BaseEntity;
 import com.easytask.easytask.src.user.entity.User;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -21,12 +19,14 @@ public class RelatedAbility extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "taskId")
+    @JsonIgnore
     private Task task;
 
     private String categoryBig;
 
     private String categorySmall;
 
+    @Builder
     public RelatedAbility(Task task, String categoryBig, String categorySmall) {
         this.task = task;
         this.categoryBig = categoryBig;

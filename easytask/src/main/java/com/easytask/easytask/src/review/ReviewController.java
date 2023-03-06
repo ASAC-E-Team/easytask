@@ -1,15 +1,10 @@
 package com.easytask.easytask.src.review;
 
 import com.easytask.easytask.common.exception.BaseException;
-import com.easytask.easytask.common.exception.BaseExceptionHandler;
 import com.easytask.easytask.common.response.BaseResponse;
 import com.easytask.easytask.common.response.BaseResponseStatus;
-import com.easytask.easytask.src.review.dto.GetReviewRes;
-import com.easytask.easytask.src.review.dto.PostPersonalAbilityReq;
-import com.easytask.easytask.src.review.dto.PostRequestRatingDto;
-import com.easytask.easytask.src.review.dto.PostRequestReviewDto;
+import com.easytask.easytask.src.review.dto.*;
 import com.easytask.easytask.src.review.entity.PersonalAbility;
-import com.easytask.easytask.src.review.entity.Rating;
 import com.easytask.easytask.src.review.entity.Review;
 import com.easytask.easytask.src.review.repository.PersonalAbilityRepository;
 import com.easytask.easytask.src.review.repository.ReviewRepository;
@@ -17,7 +12,9 @@ import com.easytask.easytask.src.task.PostTaskReq;
 import com.easytask.easytask.src.task.RelatedAbilityRepository;
 import com.easytask.easytask.src.task.TaskRepository;
 import com.easytask.easytask.src.task.TaskUserMappingRepository;
+import com.easytask.easytask.src.task.dto.PostRelatedAbilityReq;
 import com.easytask.easytask.src.task.dto.PostTaskUserMappingReq;
+import com.easytask.easytask.src.task.dto.PostTaskUserMappingRes;
 import com.easytask.easytask.src.task.entity.RelatedAbility;
 import com.easytask.easytask.src.task.entity.Task;
 import com.easytask.easytask.src.task.entity.TaskUserMapping;
@@ -25,12 +22,12 @@ import com.easytask.easytask.src.user.UserRepository;
 import com.easytask.easytask.src.user.UserService;
 import com.easytask.easytask.src.user.entity.User;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.Hibernate;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+
+import static com.easytask.easytask.common.response.BaseResponseStatus.FIND_ERROR;
 
 @RestController
 @RequiredArgsConstructor
@@ -48,11 +45,9 @@ public class ReviewController {
 
     @ResponseBody
     @PostMapping("")
-    public BaseResponse<Review> createReview(@RequestBody PostRequestReviewDto postRequestReviewDto) {
-        Long reviewId = reviewService.createReview(postRequestReviewDto);
-        Review review = reviewRepository.findOne(reviewId);
-
-        return new BaseResponse<>(review);
+    public BaseResponse<PostReviewRes> createReview(@RequestBody PostReviewReq postReviewReq) {
+        PostReviewRes postReviewRes = reviewService.createReview(postReviewReq);
+        return new BaseResponse<>(postReviewRes);
     }
 
     @ResponseBody
@@ -79,17 +74,11 @@ public class ReviewController {
 
     @ResponseBody
     @PostMapping("/add/rating/{reviewId}")
-    public BaseResponse<Review> addRatingsOfReview(@PathVariable("reviewId") Long reviewId,
-                                                         @RequestBody List<PostRequestRatingDto> postRequestRatingDtoList) {
-        Review review = reviewService.addRatingsOfReview(reviewId, postRequestRatingDtoList);
-
-        return new BaseResponse<>(review);
+    public BaseResponse<PostReviewRes> addRatingsOfReview(@PathVariable("reviewId") Long reviewId,
+                                                         @RequestBody List<PostRatingReq> postRatingReqList) {
+        PostReviewRes postReviewRes = reviewService.addRatingsOfReview(reviewId, postRatingReqList);
+        return new BaseResponse<>(postReviewRes);
     }
-
-//    @GetMapping("/rating/{reviewId}")
-//    public BaseResponse<Rating> getRatingByReviewId(@PathVariable("reviewId") Long reviewId) {
-//
-//    }
 
     @ResponseBody
     @PostMapping("/personal")
@@ -101,15 +90,19 @@ public class ReviewController {
 
     @ResponseBody
     @PostMapping("/relatedability")
-    public RelatedAbility createRelatedAbility(@RequestBody RelatedAbility relatedAbility) {
-        Task task = taskRepository.findById(relatedAbility.getTask().getId())
+    public BaseResponse<RelatedAbility> createRelatedAbility(@RequestBody PostRelatedAbilityReq postRelatedAbilityReq) {
+        Task task = taskRepository.findById(postRelatedAbilityReq.getTask())
                 .orElseThrow();
 
-        RelatedAbility relatedAbility1 = new RelatedAbility(task,relatedAbility.getCategoryBig(), relatedAbility.getCategorySmall());
+        RelatedAbility relatedAbility = RelatedAbility.builder()
+                .task(task)
+                .categoryBig(postRelatedAbilityReq.getCategoryBig())
+                .categorySmall(postRelatedAbilityReq.getCategorySmall())
+                .build();
 
-        relatedAbilityRepository.save(relatedAbility1);
+        relatedAbilityRepository.save(relatedAbility);
 
-        return relatedAbility1;
+        return new BaseResponse<>(relatedAbility);
     }
 
     @ResponseBody
@@ -123,7 +116,8 @@ public class ReviewController {
     @PostMapping("/task")
     public BaseResponse<Task> createTask(@RequestBody PostTaskReq postTaskReq) {
         Task task = postTaskReq.toEntity(postTaskReq);
-        User user = userRepository.findOne(postTaskReq.getCustomer());
+        User user = userRepository.findById(postTaskReq.getCustomer())
+                .orElseThrow(() -> new BaseException(FIND_ERROR));
         task.setCustomer(user);
         taskRepository.save(task);
         return new BaseResponse<>(task);
@@ -131,26 +125,25 @@ public class ReviewController {
 
     @ResponseBody
     @PostMapping("/taskusermapping")
-    public TaskUserMapping createTaskUserMapping(@RequestBody PostTaskUserMappingReq postTaskUserMappingReq) {
+    public BaseResponse<PostTaskUserMappingRes> createTaskUserMapping(@RequestBody PostTaskUserMappingReq postTaskUserMappingReq) {
         Task task = taskRepository.findById(postTaskUserMappingReq.getTask())
                .orElseThrow(() -> new BaseException(BaseResponseStatus.UNEXPECTED_ERROR));
-        User user = userRepository.findOne(postTaskUserMappingReq.getIrumi());
-
-        Hibernate.initialize(task);
-        Hibernate.initialize(user);
+        User user = userRepository.findById(postTaskUserMappingReq.getIrumi())
+                .orElseThrow(() -> new BaseException(FIND_ERROR));
 
         TaskUserMapping mapping = new TaskUserMapping(user,task);
         taskUserMappingRepository.save(mapping);
 
-//        taskUserMappingRepository.save(taskUserMapping);
 
-        return mapping;
+        PostTaskUserMappingRes postTaskUserMappingRes = new PostTaskUserMappingRes(mapping);
+
+        return new BaseResponse<>(postTaskUserMappingRes);
     }
 
     @GetMapping("/{reviewId}/average")
-    public BaseResponse<List<Double>> getAverageRating(@PathVariable Long reviewId) {
-        List<Double> list = reviewService.getAverageRating(reviewId);
-        return new BaseResponse<>(list);
+    public BaseResponse<GetAverageRatingRes> getAverageRating(@PathVariable Long reviewId) {
+        GetAverageRatingRes getAverageRatingRes = reviewService.getAverageRating(reviewId);
+        return new BaseResponse<>(getAverageRatingRes);
     }
 
 

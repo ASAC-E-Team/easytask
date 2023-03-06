@@ -9,7 +9,7 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "POSSIBLETASK")
+//@Table(name = "possibletask")
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

@@ -1,10 +1,6 @@
 package com.easytask.easytask.src.review;
 
-import com.easytask.easytask.common.response.BaseResponse;
-import com.easytask.easytask.src.review.dto.GetReviewRes;
-import com.easytask.easytask.src.review.dto.PostPersonalAbilityReq;
-import com.easytask.easytask.src.review.dto.PostRequestRatingDto;
-import com.easytask.easytask.src.review.dto.PostRequestReviewDto;
+import com.easytask.easytask.src.review.dto.*;
 import com.easytask.easytask.src.review.entity.PersonalAbility;
 import com.easytask.easytask.src.review.entity.Rating;
 import com.easytask.easytask.src.review.entity.Review;
@@ -17,14 +13,10 @@ import com.easytask.easytask.src.task.TaskUserMappingRepository;
 import com.easytask.easytask.src.task.entity.RelatedAbility;
 import com.easytask.easytask.src.task.entity.Task;
 import com.easytask.easytask.src.task.entity.TaskUserMapping;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -39,57 +31,53 @@ public class ReviewService {
     private final RelatedAbilityRepository relatedAbilityRepository;
     private final RatingRepository ratingRepository;
 
-    public Long createReview(PostRequestReviewDto postRequestReviewDto) {
-        System.out.println(postRequestReviewDto.getTask().getId());
-        Task task = taskRepository.findById(postRequestReviewDto.getTask().getId())
+    public PostReviewRes createReview(PostReviewReq postReviewReq) {
+
+        Task task = taskRepository.findById(postReviewReq.getTask())
                 .orElseThrow();
 
-        TaskUserMapping taskUserMapping = taskUserMappingRepository.findById(postRequestReviewDto.getTaskUserMapping().getId())
+        TaskUserMapping taskUserMapping = taskUserMappingRepository.findById(postReviewReq.getTaskUserMapping())
                 .orElseThrow();
 
-        postRequestReviewDto.setTask(task);
-        postRequestReviewDto.setTaskUserMapping(taskUserMapping);
+        Review review = Review.builder()
+                .task(task)
+                .taskUserMapping(taskUserMapping)
+                .context(postReviewReq.getContext())
+                .recommend(postReviewReq.getRecommend())
+                .build();
 
-        Review review = postRequestReviewDto.toEntity();
         reviewRepository.save(review);
 
-//        for (PostRequestRatingDto postRequestRatingDto : postRequestRatingDtoList) {
-//            PersonalAbility personalAbility = personalAbilityRepository.findById(postRequestRatingDto.getPersonalAbility().getId())
-//                    .orElseThrow();
-//
-//            RelatedAbility relatedAbility = relatedAbilityRepository.findById(postRequestRatingDto.getRelatedAbility().getId())
-//                    .orElseThrow();
-//
-//            postRequestRatingDto.setPersonalAbility(personalAbility);
-//            postRequestRatingDto.setRelatedAbility(relatedAbility);
-//
-//            Rating rating = postRequestRatingDto.toEntity();
-//            review.addRatingList(rating);
-//        }
+        PostReviewRes postReviewRes = new PostReviewRes(review);
 
-        return review.getId();
+        return postReviewRes;
     }
 
-    public Review addRatingsOfReview(Long reviewId, List<PostRequestRatingDto> postRequestRatingDtoList) {
+    public PostReviewRes addRatingsOfReview(Long reviewId, List<PostRatingReq> postRatingReqList) {
         Review review = reviewRepository.findOne(reviewId);
+        PostReviewRes postReviewRes = new PostReviewRes(review);
 
-        for (PostRequestRatingDto postRequestRatingDto : postRequestRatingDtoList) {
-            PersonalAbility personalAbility = personalAbilityRepository.findById(postRequestRatingDto.getPersonalAbility().getId())
+        for (PostRatingReq postRatingReq : postRatingReqList) {
+            PersonalAbility personalAbility = personalAbilityRepository.findById(postRatingReq.getPersonalAbility())
                     .orElseThrow();
 
-            RelatedAbility relatedAbility = relatedAbilityRepository.findById(postRequestRatingDto.getRelatedAbility().getId())
+            RelatedAbility relatedAbility = relatedAbilityRepository.findById(postRatingReq.getRelatedAbility())
                     .orElseThrow();
 
-            postRequestRatingDto.setPersonalAbility(personalAbility);
-            postRequestRatingDto.setRelatedAbility(relatedAbility);
-            postRequestRatingDto.setReview(review);
+            Rating rating = Rating.builder()
+                    .review(review)
+                    .personalAbility(personalAbility)
+                    .relatedAbility(relatedAbility)
+                    .relatedAbilityRating(postRatingReq.getRelatedAbilityRating())
+                    .personalAbilityRating(postRatingReq.getPersonalAbilityRating())
+                    .build();
 
-            Rating rating = postRequestRatingDto.toEntity();
             ratingRepository.save(rating);
-            review.addRatingList(rating);
+            PostRatingRes postRatingRes = new PostRatingRes(rating);
+            postReviewRes.addPostRatingRes(postRatingRes);
         }
 
-        return review;
+        return postReviewRes;
     }
 
     @Transactional(readOnly = true)
@@ -116,18 +104,25 @@ public class ReviewService {
         return personalAbility.getId();
     }
 
-    public List<Double> getAverageRating(Long reviewId) {
+    public GetAverageRatingRes getAverageRating(Long reviewId) {
         Review review = reviewRepository.findOne(reviewId);
-
 
         List<Rating> ratingList = review.getRatingList();
 
-        List<Double> list = new ArrayList<>();
+        GetAverageRatingRes getAverageRatingRes = new GetAverageRatingRes();
 
         double personalAbilityRatingSum = 0;
         double relatedAbilityRatingSum = 0;
 
         for (Rating rating : ratingList) {
+            RelatedAbilityList relatedAbilityList = new RelatedAbilityList(rating.getRelatedAbility().getCategorySmall()
+                    ,rating.getRelatedAbilityRating());
+            PersonalAbilityList personalAbilityList = new PersonalAbilityList(rating.getPersonalAbility().getPersonalAbility()
+                    ,rating.getPersonalAbilityRating());
+
+            getAverageRatingRes.getGetRelatedAbilitylists().add(relatedAbilityList);
+            getAverageRatingRes.getGetPersonalAbilitylists().add(personalAbilityList);
+
             personalAbilityRatingSum += rating.getPersonalAbilityRating();
             relatedAbilityRatingSum += rating.getRelatedAbilityRating();
         }
@@ -136,9 +131,9 @@ public class ReviewService {
         double personalAbilityRatingAvg = personalAbilityRatingSum / ratingCount;
         double relatedAbilityRatingAvg = relatedAbilityRatingSum / ratingCount;
 
-        list.add(personalAbilityRatingAvg);
-        list.add(relatedAbilityRatingAvg);
+        getAverageRatingRes.setPersonalAverage(personalAbilityRatingAvg);
+        getAverageRatingRes.setRelatedAverage(relatedAbilityRatingAvg);
 
-        return list;
+        return getAverageRatingRes;
     }
 }

@@ -33,13 +33,21 @@ public class Review extends BaseEntity {
     @OneToMany(mappedBy = "review")
     private List<Rating> ratingList = new ArrayList<>();
     private String context;
+    @Enumerated(EnumType.STRING)
+    private Recommend recommend;
 
     @Builder
-    public Review(Task task, TaskUserMapping taskUserMapping, String context) {
+    public Review(Task task, TaskUserMapping taskUserMapping, String context, Recommend recommend) {
         this.task = task;
         this.taskUserMapping = taskUserMapping;
         this.context = context;
+        this.recommend = recommend;
     }
+
+    public enum Recommend {
+        RECOMMEND, NOTRECOMMEND
+    }
+
 
     public void addRatingList(Rating rating) {
         ratingList.add(rating);
