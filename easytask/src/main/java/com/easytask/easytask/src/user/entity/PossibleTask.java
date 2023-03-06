@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PossibleTask extends BaseEntity {
+public class PossibleTask{
     @Id
     @Column(name = "professionalSkillId", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)

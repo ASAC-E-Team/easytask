@@ -16,6 +16,12 @@ public enum BaseResponseStatus {
     /**
      * 400 : Request, Response 오류
      */
+
+    REGISTERED_USER(false, HttpStatus.NOT_FOUND.value(), "이미 가입되어 있는 유저입니다."),
+    NOT_VALID_EMAIL(false, HttpStatus.BAD_REQUEST.value(),"이메일 형식에 맞지 않습니다"),
+    NOT_FIND_USER(false,HttpStatus.NOT_FOUND.value(),"이메일 또는 비밀번호를 확인해주세요"),
+    INVALID_REQUEST(false,HttpStatus.BAD_REQUEST.value(), "잘못된 요청입니다."),
+    INVALID_TOKEN(false,HttpStatus.BAD_REQUEST.value(), "유효하지 않은 토큰입니다."),
     NOT_FOUND_USER(false, HttpStatus.NOT_FOUND.value(), "유저가 존재하지 않습니다."),
     NOT_FOUND_TASK(false, HttpStatus.NOT_FOUND.value(), "업무가 존재하지 않습니다."),
     NOT_FOUND_ABILITY(false, HttpStatus.NOT_FOUND.value(), "해당 역량을 업무 요청서에 등록한 적이 없습니다."),

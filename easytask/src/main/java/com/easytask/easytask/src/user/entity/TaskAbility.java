@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class TaskAbility extends BaseEntity {
+public class TaskAbility{
     @Id
     @Column(name = "professionalSkillId", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
