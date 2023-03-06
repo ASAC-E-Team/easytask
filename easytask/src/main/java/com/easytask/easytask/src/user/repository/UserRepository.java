@@ -1,4 +1,4 @@
-package com.easytask.easytask.src.user;
+package com.easytask.easytask.src.user.repository;
 
 import com.easytask.easytask.src.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;

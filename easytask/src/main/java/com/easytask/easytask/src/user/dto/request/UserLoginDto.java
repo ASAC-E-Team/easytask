@@ -1,4 +1,4 @@
-package com.easytask.easytask.src.user.dto.requestDto;
+package com.easytask.easytask.src.user.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

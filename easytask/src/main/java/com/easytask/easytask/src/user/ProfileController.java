@@ -1,13 +1,11 @@
 package com.easytask.easytask.src.user;
 
 import com.easytask.easytask.common.response.BaseResponse;
-import com.easytask.easytask.src.user.dto.requestDto.TaskRequestDto;
-import com.easytask.easytask.src.user.dto.responseDto.PossibleTaskResponseDto;
-import com.easytask.easytask.src.user.dto.responseDto.TaskAbilityResponseDto;
+import com.easytask.easytask.src.user.dto.request.TaskRequestDto;
+import com.easytask.easytask.src.user.dto.response.PossibleTaskResponseDto;
+import com.easytask.easytask.src.user.dto.response.TaskAbilityResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j

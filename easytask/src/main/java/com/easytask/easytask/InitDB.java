@@ -1,6 +1,6 @@
 package com.easytask.easytask;
 
-import com.easytask.easytask.src.user.UserRepository;
+import com.easytask.easytask.src.user.repository.UserRepository;
 import com.easytask.easytask.src.user.entity.Role;
 import com.easytask.easytask.src.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -15,10 +15,10 @@ import javax.annotation.PostConstruct;
 public class InitDB {
     private final InitService initService;
 
-//    @PostConstruct
-//    public void init(){
-//        initService.initUser();
-//    }
+    @PostConstruct
+    public void init(){
+        initService.initUser();
+    }
 
     @Component
     @Transactional

@@ -1,4 +1,4 @@
-package com.easytask.easytask.src.user.dto.responseDto;
+package com.easytask.easytask.src.user.dto.response;
 
 import com.easytask.easytask.src.user.entity.User;
 import lombok.Getter;

@@ -1,7 +1,6 @@
 package com.easytask.easytask.src.user.login;
 import com.easytask.easytask.common.exception.BaseException;
-import com.easytask.easytask.common.response.BaseResponseStatus;
-import com.easytask.easytask.src.user.UserRepository;
+import com.easytask.easytask.src.user.repository.UserRepository;
 import com.easytask.easytask.src.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

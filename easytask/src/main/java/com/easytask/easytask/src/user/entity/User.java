@@ -1,7 +1,7 @@
 package com.easytask.easytask.src.user.entity;
 
 import com.easytask.easytask.common.BaseEntity;
-import com.easytask.easytask.src.user.dto.requestDto.UserRequestDto;
+import com.easytask.easytask.src.user.dto.request.UserRequestDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "USER")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends BaseEntity {

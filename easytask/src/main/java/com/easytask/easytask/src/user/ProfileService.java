@@ -1,12 +1,15 @@
 package com.easytask.easytask.src.user;
 
 import com.easytask.easytask.common.exception.BaseException;
-import com.easytask.easytask.src.user.dto.requestDto.TaskRequestDto;
-import com.easytask.easytask.src.user.dto.responseDto.PossibleTaskResponseDto;
-import com.easytask.easytask.src.user.dto.responseDto.TaskAbilityResponseDto;
+import com.easytask.easytask.src.user.dto.request.TaskRequestDto;
+import com.easytask.easytask.src.user.dto.response.PossibleTaskResponseDto;
+import com.easytask.easytask.src.user.dto.response.TaskAbilityResponseDto;
 import com.easytask.easytask.src.user.entity.PossibleTask;
 import com.easytask.easytask.src.user.entity.TaskAbility;
 import com.easytask.easytask.src.user.entity.User;
+import com.easytask.easytask.src.user.repository.PossibleTaskRepository;
+import com.easytask.easytask.src.user.repository.TaskAbilityRepository;
+import com.easytask.easytask.src.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

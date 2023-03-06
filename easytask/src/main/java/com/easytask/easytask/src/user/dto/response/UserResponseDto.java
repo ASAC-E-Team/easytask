@@ -1,14 +1,11 @@
-package com.easytask.easytask.src.user.dto.responseDto;
+package com.easytask.easytask.src.user.dto.response;
 
-import com.easytask.easytask.src.user.entity.PossibleTask;
 import com.easytask.easytask.src.user.entity.Role;
-import com.easytask.easytask.src.user.entity.TaskAbility;
 import com.easytask.easytask.src.user.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Getter
 @NoArgsConstructor

@@ -2,9 +2,9 @@ package com.easytask.easytask.src.user;
 
 import com.easytask.easytask.common.exception.BaseException;
 import com.easytask.easytask.common.response.BaseResponse;
-import com.easytask.easytask.src.user.dto.requestDto.UserLoginDto;
-import com.easytask.easytask.src.user.dto.requestDto.UserRequestDto;
-import com.easytask.easytask.src.user.dto.responseDto.UserResponseDto;
+import com.easytask.easytask.src.user.dto.request.UserLoginDto;
+import com.easytask.easytask.src.user.dto.request.UserRequestDto;
+import com.easytask.easytask.src.user.dto.response.UserResponseDto;
 import com.easytask.easytask.common.redis.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletRequest;
