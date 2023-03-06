@@ -1,31 +1,18 @@
 package com.easytask.easytask.src.user;
 
 import com.easytask.easytask.common.exception.BaseException;
-import com.easytask.easytask.common.jwt.JwtFilter;
-import com.easytask.easytask.common.jwt.TokenProvider;
 import com.easytask.easytask.common.response.BaseResponse;
-import com.easytask.easytask.src.user.dto.requestDto.TaskRequestDto;
 import com.easytask.easytask.src.user.dto.requestDto.UserLoginDto;
 import com.easytask.easytask.src.user.dto.requestDto.UserRequestDto;
-import com.easytask.easytask.src.user.dto.responseDto.PossibleTaskResponseDto;
-import com.easytask.easytask.src.user.dto.responseDto.TaskAbilityResponseDto;
 import com.easytask.easytask.src.user.dto.responseDto.UserResponseDto;
-import com.easytask.easytask.src.user.entity.User;
-import com.easytask.easytask.src.user.login.RedisUtil;
+import com.easytask.easytask.common.redis.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletRequest;
@@ -33,10 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import static com.easytask.easytask.common.jwt.JwtFilter.AUTHORIZATION_HEADER;
-import static com.easytask.easytask.common.response.BaseResponseStatus.NOT_FIND_USER;
 import static com.easytask.easytask.common.response.BaseResponseStatus.NOT_VALID_EMAIL;
 
 @Slf4j
@@ -89,7 +74,7 @@ public class UserController {
     @GetMapping("/admin")
     @Secured("ROLE_ADMIN")
     public BaseResponse<List<UserResponseDto>> getAllUser(
-            @PageableDefault(page = 0, size=10, sort = "createdAt", direction = Sort.Direction.DESC)
+            @PageableDefault(page = 0, size=3, sort = "createdAt", direction = Sort.Direction.DESC)
             Pageable pageable){
         List<UserResponseDto> userResponseDtoList = userService.getAllUser(pageable);
         return new BaseResponse<>(userResponseDtoList);

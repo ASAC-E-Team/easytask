@@ -2,7 +2,6 @@ package com.easytask.easytask.src.user;
 
 import com.easytask.easytask.common.exception.BaseException;
 import com.easytask.easytask.common.jwt.TokenProvider;
-import com.easytask.easytask.common.response.BaseResponse;
 import com.easytask.easytask.src.user.dto.requestDto.UserLoginDto;
 import com.easytask.easytask.src.user.dto.requestDto.UserRequestDto;
 import com.easytask.easytask.src.user.dto.responseDto.UserResponseDto;
@@ -10,9 +9,7 @@ import com.easytask.easytask.src.user.entity.PossibleTask;
 import com.easytask.easytask.src.user.entity.Role;
 import com.easytask.easytask.src.user.entity.TaskAbility;
 import com.easytask.easytask.src.user.entity.User;
-import com.easytask.easytask.src.user.login.RedisUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;

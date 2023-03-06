@@ -1,15 +1,10 @@
 package com.easytask.easytask.common.jwt;
-import com.easytask.easytask.src.user.login.RedisUtil;
-import lombok.RequiredArgsConstructor;
+import com.easytask.easytask.common.exception.BaseException;
+import com.easytask.easytask.common.redis.RedisUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.GenericFilterBean;
@@ -19,9 +14,10 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+
+import static com.easytask.easytask.common.response.BaseResponseStatus.INVALID_TOKEN;
 
 public class JwtFilter extends GenericFilterBean {
 
@@ -54,8 +50,6 @@ public class JwtFilter extends GenericFilterBean {
                 SecurityContextHolder.getContext().setAuthentication(authentication); //받아온 Authentication 객체를 SecurityContext에 set 해준다, 즉 저장한다
                 logger.debug("Security Context에 '{}' 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);
             }
-        } else {
-            logger.debug("유효한 JWT 토큰이 없습니다, uri: {}", requestURI);
         }
         filterChain.doFilter(servletRequest, servletResponse);
     }

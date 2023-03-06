@@ -1,4 +1,4 @@
-package com.easytask.easytask.src.user.login;
+package com.easytask.easytask.common.redis;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -18,7 +18,6 @@ public class RedisUtil {
         ValueOperations<String,String> valueOperations = stringRedisTemplate.opsForValue();
         return valueOperations.get(key);
     }
-
 
     public void setData(String key, String value) {
         ValueOperations<String,String> valueOperations = stringRedisTemplate.opsForValue();

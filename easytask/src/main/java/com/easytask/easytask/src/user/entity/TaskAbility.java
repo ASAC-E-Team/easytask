@@ -30,8 +30,4 @@ public class TaskAbility{
         this.categoryBig = categoryBig;
         this.categorySmall = categorySmall;
     }
-    public void updateSkill(String categoryBig, String categorySmall){
-        this.categoryBig=categoryBig;
-        this.categorySmall=categorySmall;
-    }
 }

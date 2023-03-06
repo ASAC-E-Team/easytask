@@ -4,7 +4,7 @@ import com.easytask.easytask.common.jwt.JwtAuthenticationEntryPoint;
 import com.easytask.easytask.common.jwt.JwtSecurityConfig;
 import com.easytask.easytask.common.jwt.TokenProvider;
 
-import com.easytask.easytask.src.user.login.RedisUtil;
+import com.easytask.easytask.common.redis.RedisUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;

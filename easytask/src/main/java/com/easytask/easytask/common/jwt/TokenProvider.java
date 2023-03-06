@@ -1,4 +1,5 @@
 package com.easytask.easytask.common.jwt;
+import com.easytask.easytask.common.exception.BaseException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -21,6 +22,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Collectors;
+
+import static com.easytask.easytask.common.response.BaseResponseStatus.INVALID_TOKEN;
 
 @Component
 public class TokenProvider implements InitializingBean { //토큰의 생성 및 유효성 검증을 담당
