@@ -1,8 +1,9 @@
 package com.easytask.easytask.src.task.entity;
 
 import com.easytask.easytask.common.BaseEntity;
-import com.easytask.easytask.src.user.entity.User;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.*;
 
 import javax.persistence.*;
@@ -31,6 +32,10 @@ public class RelatedAbility extends BaseEntity {
         this.task = task;
         this.categoryBig = categoryBig;
         this.categorySmall = categorySmall;
+    }
+
+    public void deleteRelatedAbility() {
+        this.state = State.INACTIVE;
     }
 
 }

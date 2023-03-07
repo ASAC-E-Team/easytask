@@ -1,4 +1,4 @@
-package com.easytask.easytask.src.task;
+package com.easytask.easytask.src.task.dto.request;
 
 import com.easytask.easytask.src.task.entity.Task;
 import lombok.Getter;
@@ -28,9 +28,4 @@ public class PostTaskReq {
                 .build();
     }
 
-
-    @Repository
-    public static interface RelatedAbilityRepository {
-
-    }
 }

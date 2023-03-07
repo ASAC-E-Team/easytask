@@ -1,19 +1,15 @@
 package com.easytask.easytask.src.user.entity;
 
 import com.easytask.easytask.common.BaseEntity;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
-//@Table(name = "TASKABILITY")
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class TaskAbility extends BaseEntity {
+public class TaskAbility{
     @Id
     @Column(name = "taskAbilityId", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +22,9 @@ public class TaskAbility extends BaseEntity {
     private String categoryBig;
 
     private String categorySmall;
+
+
+    @Builder
 
     public TaskAbility(User user, String categoryBig, String categorySmall) {
         this.user = user;

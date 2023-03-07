@@ -1,19 +1,15 @@
 package com.easytask.easytask.src.user.entity;
 
 import com.easytask.easytask.common.BaseEntity;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
-//@Table(name = "possibletask")
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PossibleTask extends BaseEntity {
+public class PossibleTask{
     @Id
     @Column(name = "possibleTaskId", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,10 +23,10 @@ public class PossibleTask extends BaseEntity {
 
     private String categorySmall;
 
+    @Builder
     public PossibleTask(User user, String categoryBig, String categorySmall) {
         this.user = user;
         this.categoryBig = categoryBig;
         this.categorySmall = categorySmall;
     }
-
 }

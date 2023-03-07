@@ -1,16 +1,11 @@
 package com.easytask.easytask.src.review;
 
-import com.easytask.easytask.src.review.entity.Rating;
-import com.easytask.easytask.src.review.entity.Review;
 import com.easytask.easytask.src.review.repository.ReviewRepository;
-import com.easytask.easytask.src.task.TaskRepository;
 import com.easytask.easytask.src.task.entity.RelatedAbility;
 import com.easytask.easytask.src.task.entity.Task;
 import com.easytask.easytask.src.task.entity.TaskUserMapping;
 import com.easytask.easytask.src.user.UserController;
-import com.easytask.easytask.src.user.UserRepository;
 import com.easytask.easytask.src.user.UserService;
-import com.easytask.easytask.src.user.entity.PossibleTask;
 import com.easytask.easytask.src.user.entity.User;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,10 +16,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest

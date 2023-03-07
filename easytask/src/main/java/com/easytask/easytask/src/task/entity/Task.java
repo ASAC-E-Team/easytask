@@ -1,9 +1,15 @@
 package com.easytask.easytask.src.task.entity;
 
 import com.easytask.easytask.common.BaseEntity;
+import com.easytask.easytask.src.task.dto.request.TaskRequestDto;
 import com.easytask.easytask.src.user.entity.User;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -13,10 +19,13 @@ import java.util.List;
 @Getter
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@DynamicInsert
+@DynamicUpdate
 public class Task extends BaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false, updatable = false)
+    @Column(name = "taskId",nullable = false, updatable = false)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -32,19 +41,48 @@ public class Task extends BaseEntity {
 
     private String categorySmall;
 
-//    private Integer numberOfIrumi;
+
+    private Integer numberOfIrumi;
+
 
     @OneToMany(mappedBy = "task", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<TaskUserMapping> IrumiList = new ArrayList<>();
+    private List<TaskUserMapping> irumiList = new ArrayList<>();
 
     @OneToMany(mappedBy = "task", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<RelatedAbility> relatedAbilityList = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
-    private MatchingStatus matchingStatus = MatchingStatus.NOT_MATCHED;
+    private MatchingStatus matchingStatus = MatchingStatus.STANDBY;
+
+    public void updateTask(TaskRequestDto taskRequestDto) {
+        this.taskName = taskRequestDto.getTaskName();
+        this.details = taskRequestDto.getDetails();
+        this.categoryBig = taskRequestDto.getCategoryBig();
+        this.categorySmall = taskRequestDto.getCategorySmall();
+        this.numberOfIrumi = taskRequestDto.getNumberOfIrumi();
+    }
+
+    public void deleteTask() {
+        this.state = State.INACTIVE;
+    }
+
+    public void updateMatchingStatus(MatchingStatus matchingStatus) {
+        this.matchingStatus = matchingStatus;
+    }
 
     public enum MatchingStatus {
-        NOT_MATCHED, NOT_STARTED, DOING, DONE
+        STANDBY, NOT_MATCHED, NOT_STARTED, DOING, DONE
+    }
+
+    @Builder
+    public Task(User customer, String taskName, String details,
+                String categoryBig, String categorySmall, Integer numberOfIrumi) {
+        this.customer = customer;
+        this.taskName = taskName;
+        this.details = details;
+        this.categoryBig = categoryBig;
+        this.categorySmall = categorySmall;
+        this.numberOfIrumi = numberOfIrumi;
     }
 
     @Builder
@@ -57,7 +95,7 @@ public class Task extends BaseEntity {
     }
 
     public void addIrumiList(TaskUserMapping taskUserMapping) {
-        IrumiList.add(taskUserMapping);
+        irumiList.add(taskUserMapping);
     }
 
     public void addRelatedAbilityList(RelatedAbility relatedAbility) {
