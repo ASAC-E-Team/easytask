@@ -25,7 +25,7 @@ public class MatchingMailScheduler {
     private final JobLauncher jobLauncher;
     private final MatchingRequest matchingRequest;
 
-    @Scheduled(fixedDelay = 40000)
+    @Scheduled(fixedDelay = 15000)
     public void startJob() {
         try {
             List<Task> taskList = matchingRequest.getTaskList();
