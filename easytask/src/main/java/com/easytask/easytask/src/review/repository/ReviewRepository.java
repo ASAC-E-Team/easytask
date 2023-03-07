@@ -26,6 +26,14 @@ public class ReviewRepository {
                 .getResultList();
     }
 
+    public List<Review> getReviewByTaskIdAndIrumiIdAndState(Long taskId, Long irumiId, State state) {
+        return entityManger.createQuery("select r from Review r join r.task t join r.irumi u where t.id = :taskId and u.id = :irumiId and r.state = :state", Review.class)
+                .setParameter("taskId", taskId)
+                .setParameter("irumiId", irumiId)
+                .setParameter("state", state)
+                .getResultList();
+    }
+
     public List<Review> getReviewsByIrumiIdAndState(Long irumiId, State state) {
         return entityManger.createQuery("select r from Review r join r.irumi u where u.id = :irumiId and r.state = :state", Review.class)
                 .setParameter("irumiId", irumiId)

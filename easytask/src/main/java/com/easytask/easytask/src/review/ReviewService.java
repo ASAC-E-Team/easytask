@@ -1,5 +1,8 @@
 package com.easytask.easytask.src.review;
 
+import com.easytask.easytask.common.exception.BaseException;
+import com.easytask.easytask.common.response.BaseResponse;
+import com.easytask.easytask.common.response.BaseResponseStatus;
 import com.easytask.easytask.src.review.dto.*;
 import com.easytask.easytask.src.review.dto.request.PersonalAbilityRequestDto;
 import com.easytask.easytask.src.review.dto.request.ReviewRequestDto;
@@ -23,6 +26,7 @@ import java.util.List;
 import java.util.Random;
 
 import static com.easytask.easytask.common.BaseEntity.State.ACTIVE;
+import static com.easytask.easytask.common.response.BaseResponseStatus.BAD_REQUEST_ALREADY_REVIEW;
 
 @Service
 @Transactional
@@ -39,6 +43,14 @@ public class ReviewService {
     private final RatingRepository ratingRepository;
 
     public ReviewResponseDto createReview(ReviewRequestDto reviewRequestDto) {
+
+
+        List<Review> reviewList = reviewRepository.getReviewByTaskIdAndIrumiIdAndState(reviewRequestDto.getTask()
+                ,reviewRequestDto.getIrumi(), ACTIVE);
+
+        if (reviewList.size() == 1) {
+            throw new BaseException(BAD_REQUEST_ALREADY_REVIEW);
+        }
 
         Task task = taskRepository.findById(reviewRequestDto.getTask())
                 .orElseThrow();
@@ -72,18 +84,35 @@ public class ReviewService {
 
         for (RelatedAbility relatedAbility : relatedAbilityList) {
 
-            int score = random.nextInt(1) + 1;
-
             RelatedAbilityRating relatedAbilityRating = RelatedAbilityRating.builder()
                     .relatedAbility(relatedAbility)
+                    .relatedAbility(relatedAbility)
+                    .relatedAbility(relatedAbility)
                     .rating(rating)
-                    .relatedAbilityRating(score)
+                    .relatedAbilityRating(random.nextInt(5) + 1)
                     .build();
 
             relatedAbilityRatingRepository.save(relatedAbilityRating);
             rating.addRelatedAbilityRating(relatedAbilityRating);
             RelatedAbilityRatingResponseDto relatedAbilityRatingResponseDto = new RelatedAbilityRatingResponseDto(relatedAbilityRating);
             ratingResponseDto.addRelatedAbilityRatingResponseDto(relatedAbilityRatingResponseDto);
+        }
+
+        for (Long i = 1L; i <= 2L; i++) {
+
+            PersonalAbility personalAbility = personalAbilityRepository.findById(i)
+                    .orElseThrow();
+
+            PersonalAbilityRating personalAbilityRating = PersonalAbilityRating.builder()
+                    .personalAbility(personalAbility)
+                    .rating(rating)
+                    .personalAbilityRating(random.nextInt(5) + 1)
+                    .build();
+
+            personalAbilityRatingRepository.save(personalAbilityRating);
+            rating.addPersonalAbilityRating(personalAbilityRating);
+            PersonalAbilityRatingResponseDto personalAbilityRatingResponseDto = new PersonalAbilityRatingResponseDto(personalAbilityRating);
+            ratingResponseDto.addPersonalAbilityRatingResponseDto(personalAbilityRatingResponseDto);
         }
 
         review.addRating(rating);
