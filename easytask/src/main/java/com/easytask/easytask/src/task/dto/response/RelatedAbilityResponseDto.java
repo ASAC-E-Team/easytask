@@ -8,8 +8,10 @@ import lombok.Setter;
 @Setter
 public class RelatedAbilityResponseDto {
     private Long relatedAbilityId;
+    private String relatedAbility;
 
     public RelatedAbilityResponseDto(RelatedAbility relatedAbility) {
         this.relatedAbilityId = relatedAbility.getId();
+        this.relatedAbility = relatedAbility.getCategorySmall();
     }
 }

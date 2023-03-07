@@ -24,23 +24,23 @@ public class Rating extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reviewId")
     private Review review;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "relatedAbilityId")
-    private RelatedAbility relatedAbility;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "personalAbilityId")
-    private PersonalAbility personalAbility;
-    private int relatedAbilityRating;
-    private int personalAbilityRating;
+
+    @OneToMany(mappedBy = "rating")
+    private List<RelatedAbilityRating> relatedAbilityRatingList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "rating")
+    private List<PersonalAbilityRating> personalAbilityRatingList = new ArrayList<>();
 
     @Builder
-    public Rating(Review review, RelatedAbility relatedAbility, PersonalAbility personalAbility, int relatedAbilityRating, int personalAbilityRating) {
+    public Rating(Review review) {
         this.review = review;
-        this.relatedAbility = relatedAbility;
-        this.personalAbility = personalAbility;
-        this.relatedAbilityRating = relatedAbilityRating;
-        this.personalAbilityRating = personalAbilityRating;
     }
 
+    public void addRelatedAbilityRating(RelatedAbilityRating relatedAbilityRating) {
+        this.relatedAbilityRatingList.add(relatedAbilityRating);
+    }
 
+    public void addPersonalAbilityRating(PersonalAbilityRating personalAbilityRating) {
+        this.personalAbilityRatingList.add(personalAbilityRating);
+    }
 }

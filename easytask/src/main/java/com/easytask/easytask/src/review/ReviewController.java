@@ -2,16 +2,19 @@ package com.easytask.easytask.src.review;
 
 import com.easytask.easytask.common.response.BaseResponse;
 import com.easytask.easytask.src.review.dto.*;
+import com.easytask.easytask.src.review.dto.request.PersonalAbilityRequestDto;
+import com.easytask.easytask.src.review.dto.request.ReviewRequestDto;
+import com.easytask.easytask.src.review.dto.response.PersonalAbilityResponseDto;
+import com.easytask.easytask.src.review.dto.response.RatingResponseDto;
+import com.easytask.easytask.src.review.dto.response.ReviewResponseDto;
 import com.easytask.easytask.src.review.entity.PersonalAbility;
 import com.easytask.easytask.src.review.entity.Rating;
 import com.easytask.easytask.src.review.entity.Review;
-import com.easytask.easytask.src.review.repository.PersonalAbilityRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,81 +22,59 @@ import java.util.Optional;
 public class ReviewController {
 
     private final ReviewService reviewService;
-    private final PersonalAbilityRepository personalAbilityRepository;
 
     @ResponseBody
     @PostMapping("")
-    public BaseResponse<PostReviewRes> createReview(@RequestBody PostReviewReq postReviewReq) {
-        PostReviewRes postReviewRes = reviewService.createReview(postReviewReq);
-        return new BaseResponse<>(postReviewRes);
-    }
-
-    @ResponseBody
-    @GetMapping("/{reviewId}")
-    public BaseResponse<GetReviewRes> getReview(@PathVariable("reviewId") Long reviewId) {
-        GetReviewRes review = reviewService.getReview(reviewId);
-        return new BaseResponse<>(review);
+    public BaseResponse<ReviewResponseDto> createReview(@RequestBody ReviewRequestDto reviewRequestDto) {
+        ReviewResponseDto reviewResponseDto = reviewService.createReview(reviewRequestDto);
+        return new BaseResponse<>(reviewResponseDto);
     }
 
     @ResponseBody
     @GetMapping("/lists/users/{userId}")
-    public BaseResponse<List<PostReviewRes>> getReviewsByUserId(@PathVariable("userId") Long userId) {
-        List<Review> reviewList = reviewService.getReviewsByUserId(userId);
-        List<PostReviewRes> list = new ArrayList<>();
-
-        for (Review review : reviewList) {
-            PostReviewRes postReviewRes = new PostReviewRes(review);
-
-            for (Rating rating: review.getRatingList()) {
-                PostRatingRes postRatingRes = new PostRatingRes(rating);
-                postReviewRes.addPostRatingRes(postRatingRes);
-            }
-            list.add(postReviewRes);
-        }
-
-        return new BaseResponse<>(list);
+    public BaseResponse<List<ReviewResponseDto>> getReviewsByUserId(@PathVariable("userId") Long userId) {
+        List<ReviewResponseDto> reviewList = reviewService.getReviewsByUserId(userId);
+        return new BaseResponse<>(reviewList);
     }
 
     @ResponseBody
     @GetMapping("/lists/irumies/{irumiId}")
-    public BaseResponse<List<PostReviewRes>> getReviewsByIrumiId(@PathVariable("irumiId") Long irumiId) {
-        List<Review> reviewList = reviewService.getReviewsByIrumiId(irumiId);
-        List<PostReviewRes> list = new ArrayList<>();
-
-        for (Review review : reviewList) {
-            PostReviewRes postReviewRes = new PostReviewRes(review);
-
-            for (Rating rating: review.getRatingList()) {
-                PostRatingRes postRatingRes = new PostRatingRes(rating);
-                postReviewRes.addPostRatingRes(postRatingRes);
-            }
-            list.add(postReviewRes);
-        }
-
-        return new BaseResponse<>(list);
+    public BaseResponse<List<ReviewResponseDto>> getReviewsByIrumiId(@PathVariable("irumiId") Long irumiId) {
+        List<ReviewResponseDto> reviewList = reviewService.getReviewsByIrumiId(irumiId);
+        return new BaseResponse<>(reviewList);
     }
 
     @ResponseBody
     @PostMapping("/add/rating/{reviewId}")
-    public BaseResponse<PostReviewRes> addRatingsOfReview(@PathVariable("reviewId") Long reviewId,
-                                                         @RequestBody List<PostRatingReq> postRatingReqList) {
-        PostReviewRes postReviewRes = reviewService.addRatingsOfReview(reviewId, postRatingReqList);
-        return new BaseResponse<>(postReviewRes);
+    public BaseResponse<ReviewResponseDto> addRatingsOfReview(@PathVariable("reviewId") Long reviewId) {
+        ReviewResponseDto reviewResponseDto = reviewService.addRatingsOfReview(reviewId);
+        return new BaseResponse<>(reviewResponseDto);
     }
 
     @ResponseBody
     @PostMapping("/personal")
-    public BaseResponse<Optional<PersonalAbility>> createPersonalAbility(@RequestBody PostPersonalAbilityReq postPersonalAbilityReq) {
-       Long personalAbilityId = reviewService.createPersonalAbility(postPersonalAbilityReq);
-       Optional<PersonalAbility> personalAbility = personalAbilityRepository.findById(personalAbilityId);
-       return new BaseResponse<>(personalAbility);
+    public BaseResponse<PersonalAbilityResponseDto> createPersonalAbility(@RequestBody PersonalAbilityRequestDto personalAbilityRequestDto) {
+       PersonalAbility personalAbility = reviewService.createPersonalAbility(personalAbilityRequestDto);
+       PersonalAbilityResponseDto personalAbilityResponseDto = new PersonalAbilityResponseDto(personalAbility);
+       return new BaseResponse<>(personalAbilityResponseDto);
     }
 
-    @GetMapping("/{reviewId}/average")
-    public BaseResponse<GetAverageRatingRes> getAverageRating(@PathVariable Long reviewId) {
-        GetAverageRatingRes getAverageRatingRes = reviewService.getAverageRating(reviewId);
-        return new BaseResponse<>(getAverageRatingRes);
+    @ResponseBody
+    @GetMapping("/average/{reviewId}")
+    public BaseResponse<RatingAverageResponseDto> getRatingAverage(@PathVariable("reviewId") Long reviewId) {
+        RatingAverageResponseDto ratingAverageResponseDto = reviewService.getRatingAverage(reviewId);
+        return new BaseResponse<>(ratingAverageResponseDto);
     }
 
+//    @PatchMapping("/{reviewId}")
+//    public BaseResponse<ReviewResponseDto> modifyReview(@PathVariable("reviewId") Long reviewId
+//                                                            ,@RequestBody ReviewRequestDto reviewRequestDto) {
+//
+//    }
 
+    @DeleteMapping("/{reviewId}")
+    public BaseResponse deleteReview(@PathVariable("reviewId") Long reviewId) {
+        reviewService.deleteReview(reviewId);
+        return new BaseResponse("삭제 됐습니다.");
+    }
 }
