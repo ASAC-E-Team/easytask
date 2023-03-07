@@ -5,6 +5,7 @@ import com.easytask.easytask.common.exception.BaseException;
 import com.easytask.easytask.common.jwt.TokenProvider;
 import com.easytask.easytask.src.user.dto.request.UserLoginDto;
 import com.easytask.easytask.src.user.dto.request.UserRequestDto;
+import com.easytask.easytask.src.user.dto.request.AbilitySettingRequestDto;
 import com.easytask.easytask.src.user.dto.response.UserResponseDto;
 import com.easytask.easytask.src.user.entity.PossibleTask;
 import com.easytask.easytask.src.user.entity.Role;
@@ -76,6 +77,15 @@ public class UserService {
                 .role(Role.ROLE_USER)
                 .build();
 
+        userRepository.save(user);
+
+        return new UserResponseDto(user);
+
+    }
+
+    public UserResponseDto SkillSetting(AbilitySettingRequestDto requestDto, String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(()-> new BaseException(NOT_FIND_USER));
         for(Map<String,String> a : requestDto.getPossibleTask()){
             PossibleTask possibleTask = PossibleTask.builder()
                     .user(user)
@@ -92,12 +102,10 @@ public class UserService {
                     .build();
             user.addTaskAbility(taskAbility);
         }
-        userRepository.save(user);
 
         return new UserResponseDto(user);
-
-
     }
+
     public void updateUser(UserRequestDto requestDto, String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(()-> new BaseException(NOT_FIND_USER));
@@ -122,5 +130,7 @@ public class UserService {
         }
         return userResponseDtoList;
     }
+
+
 }
 

@@ -20,8 +20,5 @@ public class UserRequestDto {
     private String password;
     private String name;
 
-    private List<Map<String,String>> possibleTask; //큰카테고리 작은카테고리
-
-    private List<Map<String,String>> taskAbility;
 
 }
