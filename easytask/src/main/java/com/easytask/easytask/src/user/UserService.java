@@ -1,5 +1,6 @@
 package com.easytask.easytask.src.user;
 
+
 import com.easytask.easytask.common.exception.BaseException;
 import com.easytask.easytask.common.jwt.TokenProvider;
 import com.easytask.easytask.src.user.dto.request.UserLoginDto;
@@ -121,7 +122,5 @@ public class UserService {
         }
         return userResponseDtoList;
     }
-
-
 }
 

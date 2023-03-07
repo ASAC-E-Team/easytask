@@ -11,7 +11,7 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PossibleTask{
     @Id
-    @Column(name = "professionalSkillId", nullable = false, updatable = false)
+    @Column(name = "possibleTaskId", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

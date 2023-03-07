@@ -16,4 +16,6 @@ public interface TaskUserMappingRepository extends JpaRepository<TaskUserMapping
 
     @EntityGraph(attributePaths = {"task"})
     Optional<Page<TaskUserMapping>> findWithTaskByIrumiIdAndState(Long irumiId, BaseEntity.State active, PageRequest pageRequest);
+
+    Optional<TaskUserMapping> findById(Long id);
 }

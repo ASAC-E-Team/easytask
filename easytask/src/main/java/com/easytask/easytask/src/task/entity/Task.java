@@ -3,9 +3,13 @@ package com.easytask.easytask.src.task.entity;
 import com.easytask.easytask.common.BaseEntity;
 import com.easytask.easytask.src.task.dto.request.TaskRequestDto;
 import com.easytask.easytask.src.user.entity.User;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
+
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -26,6 +30,7 @@ public class Task extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
+    @JsonIgnore
     private User customer;
 
     private String taskName;
@@ -36,7 +41,9 @@ public class Task extends BaseEntity {
 
     private String categorySmall;
 
+
     private Integer numberOfIrumi;
+
 
     @OneToMany(mappedBy = "task", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<TaskUserMapping> irumiList = new ArrayList<>();
@@ -76,5 +83,26 @@ public class Task extends BaseEntity {
         this.categoryBig = categoryBig;
         this.categorySmall = categorySmall;
         this.numberOfIrumi = numberOfIrumi;
+    }
+
+    @Builder
+    public Task(User user, String taskName, String details, String categoryBig, String categorySmall) {
+        customer = user;
+        this.taskName = taskName;
+        this.details = details;
+        this.categoryBig = categoryBig;
+        this.categorySmall = categorySmall;
+    }
+
+    public void addIrumiList(TaskUserMapping taskUserMapping) {
+        irumiList.add(taskUserMapping);
+    }
+
+    public void addRelatedAbilityList(RelatedAbility relatedAbility) {
+        relatedAbilityList.add(relatedAbility);
+    }
+
+    public void setCustomer(User customer) {
+        this.customer = customer;
     }
 }

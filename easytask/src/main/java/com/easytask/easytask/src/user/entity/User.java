@@ -30,6 +30,7 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String password;
 
+
     @Enumerated(EnumType.STRING)
     private Role role = Role.ROLE_USER;
 
@@ -49,6 +50,7 @@ public class User extends BaseEntity {
     public void updateUser(UserRequestDto userRequestDto){
         this.email= userRequestDto.getEmail();
         this.password= userRequestDto.getPassword();
+
     }
 
     public void addPossibleTask(PossibleTask possibleTask){

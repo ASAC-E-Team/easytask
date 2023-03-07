@@ -1,7 +1,9 @@
 package com.easytask.easytask.src.task.entity;
 
 import com.easytask.easytask.common.BaseEntity;
-import com.easytask.easytask.src.user.entity.User;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,6 +20,7 @@ public class RelatedAbility extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "taskId")
+    @JsonIgnore
     private Task task;
 
     private String categoryBig;
@@ -34,4 +37,5 @@ public class RelatedAbility extends BaseEntity {
     public void deleteRelatedAbility() {
         this.state = State.INACTIVE;
     }
+
 }

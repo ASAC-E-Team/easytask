@@ -13,4 +13,6 @@ public interface RelatedAbilityRepository extends JpaRepository<RelatedAbility, 
     List<RelatedAbility> findAllByTaskIdAndState(Long taskId, BaseEntity.State active);
 
     Optional<RelatedAbility> findByCategorySmallAndState(String categorySmall, BaseEntity.State inactive);
+
+    Optional<RelatedAbility> findById(Long id);
 }

@@ -17,6 +17,9 @@ public enum BaseResponseStatus {
      * 400 : Request, Response 오류
      */
 
+
+    FIND_ERROR(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "유저가 없어요"),
+
     REGISTERED_USER(false, HttpStatus.NOT_FOUND.value(), "이미 가입되어 있는 유저입니다."),
     NOT_VALID_EMAIL(false, HttpStatus.BAD_REQUEST.value(),"이메일 형식에 맞지 않습니다"),
     NOT_FIND_USER(false,HttpStatus.NOT_FOUND.value(),"이메일 또는 비밀번호를 확인해주세요"),
@@ -39,7 +42,13 @@ public enum BaseResponseStatus {
      * 500
      */
     DB_CONNECTION_ERROR(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "데이터 베이스 오류 발생"),
+
     UNEXPECTED_ERROR(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "예상치 못한 에러가 발생했습니다.");
+
+
+
+
+
 
 
     private final boolean isSuccess;

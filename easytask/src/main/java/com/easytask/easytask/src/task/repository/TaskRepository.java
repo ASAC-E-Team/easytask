@@ -22,4 +22,6 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     Optional<Task> findWithMappingAndCustomerByIdAndState(Long taskId, BaseEntity.State active);
 
     Optional<Page<Task>> findByCustomerIdAndState(Long customerId, BaseEntity.State active, PageRequest pageRequest);
+
+    Optional<Task> findById(Long id);
 }

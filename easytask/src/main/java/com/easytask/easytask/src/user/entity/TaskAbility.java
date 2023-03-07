@@ -11,7 +11,7 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TaskAbility{
     @Id
-    @Column(name = "professionalSkillId", nullable = false, updatable = false)
+    @Column(name = "taskAbilityId", nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -23,10 +23,13 @@ public class TaskAbility{
 
     private String categorySmall;
 
+
     @Builder
+
     public TaskAbility(User user, String categoryBig, String categorySmall) {
         this.user = user;
         this.categoryBig = categoryBig;
         this.categorySmall = categorySmall;
     }
+
 }
