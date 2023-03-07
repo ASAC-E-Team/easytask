@@ -1,4 +1,6 @@
 package com.easytask.easytask.common.jwt;
+import com.easytask.easytask.common.exception.BaseException;
+import com.easytask.easytask.common.response.BaseResponseStatus;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -16,7 +18,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     public void commence(HttpServletRequest request,
                          HttpServletResponse response,
                          AuthenticationException authException) throws IOException {
-        // 유효한 자격증명을 제공하지 않고 접근하려 할때 401에러를 리턴
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+        // 유효한 자격증명을 제공하지 않고 접근하려 할때 에러 호출
+        throw new BaseException(BaseResponseStatus.INVALID_TOKEN);
     }
 }
