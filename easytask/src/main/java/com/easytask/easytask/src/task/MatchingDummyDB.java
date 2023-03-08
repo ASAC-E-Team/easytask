@@ -19,7 +19,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class startDB {
+public class MatchingDummyDB {
     private final InitService initService;
 
     @PostConstruct

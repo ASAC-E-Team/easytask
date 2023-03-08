@@ -163,7 +163,7 @@ public class TaskService {
 
         try {
             User customer = task.getCustomer();
-            task.updateMatchingStatus(Task.MatchingStatus.NOT_MATCHED);
+            task.updateMatchingStatus(Task.MatchingStatus.MATCHING);
             matchingRequest.addTask(task);
             mailService.sendMatchingMail(new MailGenerator().createMatchingMail(task, customer));
         } catch (Exception exception) {
@@ -195,7 +195,7 @@ public class TaskService {
 
             if (checkMatchingIsOver(matchedCount + 1, needCount)) {
                 matchingRequest.removeTask(taskId);
-                task.updateMatchingStatus(Task.MatchingStatus.NOT_STARTED);
+                task.updateMatchingStatus(Task.MatchingStatus.MATCHED);
                 mailService.sendMatchingMail(new MailGenerator().createMatchedMail(task, customer));
             }
         } catch (Exception exception) {

@@ -71,7 +71,7 @@ public class Task extends BaseEntity {
     }
 
     public enum MatchingStatus {
-        STANDBY, NOT_MATCHED, NOT_STARTED, DOING, DONE
+        STANDBY, MATCHING, MATCHED, DOING, DONE
     }
 
     @Builder
@@ -83,26 +83,5 @@ public class Task extends BaseEntity {
         this.categoryBig = categoryBig;
         this.categorySmall = categorySmall;
         this.numberOfIrumi = numberOfIrumi;
-    }
-
-    @Builder
-    public Task(User user, String taskName, String details, String categoryBig, String categorySmall) {
-        customer = user;
-        this.taskName = taskName;
-        this.details = details;
-        this.categoryBig = categoryBig;
-        this.categorySmall = categorySmall;
-    }
-
-    public void addIrumiList(TaskUserMapping taskUserMapping) {
-        irumiList.add(taskUserMapping);
-    }
-
-    public void addRelatedAbilityList(RelatedAbility relatedAbility) {
-        relatedAbilityList.add(relatedAbility);
-    }
-
-    public void setCustomer(User customer) {
-        this.customer = customer;
     }
 }

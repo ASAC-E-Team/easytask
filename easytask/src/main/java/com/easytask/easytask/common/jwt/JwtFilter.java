@@ -1,6 +1,5 @@
 package com.easytask.easytask.common.jwt;
-import com.easytask.easytask.common.exception.BaseException;
-import com.easytask.easytask.common.redis.RedisUtil;
+import com.easytask.easytask.common.util.RedisUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -16,8 +15,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-
-import static com.easytask.easytask.common.response.BaseResponseStatus.INVALID_TOKEN;
 
 public class JwtFilter extends GenericFilterBean {
 

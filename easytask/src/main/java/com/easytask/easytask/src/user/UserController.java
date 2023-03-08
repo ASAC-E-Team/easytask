@@ -7,7 +7,7 @@ import com.easytask.easytask.src.user.dto.request.UserLoginDto;
 import com.easytask.easytask.src.user.dto.request.UserRequestDto;
 import com.easytask.easytask.src.user.dto.request.AbilitySettingRequestDto;
 import com.easytask.easytask.src.user.dto.response.UserResponseDto;
-import com.easytask.easytask.common.redis.RedisUtil;
+import com.easytask.easytask.common.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;

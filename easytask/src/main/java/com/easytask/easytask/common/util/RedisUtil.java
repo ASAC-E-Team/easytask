@@ -1,4 +1,4 @@
-package com.easytask.easytask.common.redis;
+package com.easytask.easytask.common.util;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;

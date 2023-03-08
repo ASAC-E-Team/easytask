@@ -4,7 +4,7 @@ import com.easytask.easytask.common.jwt.JwtAuthenticationEntryPoint;
 import com.easytask.easytask.common.jwt.JwtSecurityConfig;
 import com.easytask.easytask.common.jwt.TokenProvider;
 
-import com.easytask.easytask.common.redis.RedisUtil;
+import com.easytask.easytask.common.util.RedisUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -58,7 +58,7 @@ public class SecurityConfig{
 
                 .and()
                 .authorizeHttpRequests()//HttpServletRequest를 사용하는 요청들에 대한 접근체한을 설정
-                .antMatchers("/**","/easytask/user/login","/easytask/user/sign-up").permitAll() //  여기서 설정한 url에 대한 요청은 인증없이 접근을 허용하겠다는 의미
+                .antMatchers("/","/easytask/user/login","/easytask/user/sign-up").permitAll() //  여기서 설정한 url에 대한 요청은 인증없이 접근을 허용하겠다는 의미
                 .anyRequest().authenticated() //그 이외 나머지 요청들은 모두 인증되어야 한다.
 
                 .and()

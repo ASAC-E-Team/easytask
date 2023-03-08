@@ -1,5 +1,5 @@
 package com.easytask.easytask.common.jwt;
-import com.easytask.easytask.common.redis.RedisUtil;
+import com.easytask.easytask.common.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
