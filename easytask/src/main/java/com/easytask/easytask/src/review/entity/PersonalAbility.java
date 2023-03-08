@@ -16,9 +16,7 @@ public class PersonalAbility extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "personalAbilityId")
     private Long id;
-
     private String personalAbility;
-
     public PersonalAbility(String personalAbility) {
         this.personalAbility = personalAbility;
     }

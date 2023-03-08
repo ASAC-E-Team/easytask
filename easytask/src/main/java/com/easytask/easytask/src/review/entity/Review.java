@@ -3,6 +3,7 @@ package com.easytask.easytask.src.review.entity;
 import com.easytask.easytask.common.BaseEntity;
 import com.easytask.easytask.src.task.entity.Task;
 import com.easytask.easytask.src.task.entity.TaskUserMapping;
+import com.easytask.easytask.src.user.entity.User;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,32 +27,36 @@ public class Review extends BaseEntity {
     @JoinColumn(name = "taskId")
     private Task task;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "taskUserMappingId")
-    private TaskUserMapping taskUserMapping;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId")
+    private User irumi;
 
-    @OneToMany(mappedBy = "review")
-    private List<Rating> ratingList = new ArrayList<>();
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ratingId")
+    private Rating rating;
     private String context;
     @Enumerated(EnumType.STRING)
     private Recommend recommend;
 
     @Builder
-    public Review(Task task, TaskUserMapping taskUserMapping, String context, Recommend recommend) {
+    public Review(Task task, User irumi, Rating rating, String context, Recommend recommend) {
         this.task = task;
-        this.taskUserMapping = taskUserMapping;
+        this.irumi = irumi;
+        this.rating = rating;
         this.context = context;
         this.recommend = recommend;
+    }
+
+    public void addRating(Rating rating) {
+        this.rating = rating;
+    }
+
+    public void delete() {
+        this.state = State.INACTIVE;
     }
 
     public enum Recommend {
         RECOMMEND, NOTRECOMMEND
     }
-
-
-    public void addRatingList(Rating rating) {
-        ratingList.add(rating);
-    }
-
 
 }
