@@ -5,6 +5,7 @@ import com.easytask.easytask.common.exception.BaseException;
 import com.easytask.easytask.common.response.BaseResponse;
 import com.easytask.easytask.src.user.dto.request.UserLoginDto;
 import com.easytask.easytask.src.user.dto.request.UserRequestDto;
+import com.easytask.easytask.src.user.dto.request.AbilitySettingRequestDto;
 import com.easytask.easytask.src.user.dto.response.UserResponseDto;
 import com.easytask.easytask.common.redis.RedisUtil;
 import lombok.RequiredArgsConstructor;
@@ -56,6 +57,19 @@ public class UserController {
             throw new BaseException(NOT_VALID_EMAIL);
         }
     }
+
+    @PostMapping("/addskill/{email}")
+    public BaseResponse<UserResponseDto> SkillSetting(
+            @Valid @RequestBody AbilitySettingRequestDto requestDto,
+            @PathVariable String email){
+        try{
+            UserResponseDto userResponseDto = userService.SkillSetting(requestDto,email);
+            return new BaseResponse<>(userResponseDto);
+        } catch (Exception e){
+            throw new BaseException(NOT_VALID_EMAIL);
+        }
+    }
+
 
     @PatchMapping("/{email}")
     public BaseResponse<String> updateUser(
