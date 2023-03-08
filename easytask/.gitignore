@@ -35,3 +35,10 @@ out/
 
 ### VS Code ###
 .vscode/
+
+application.yml
+*.yml
+
+### Task 도메인 테스팅을 위한 DB initail 제외 ###
+/src/main/java/com/easytask/easytask/src/task/InitDB.java
+/src/main/java/com/easytask/easytask/src/task/TaskDummyInitDB.java
