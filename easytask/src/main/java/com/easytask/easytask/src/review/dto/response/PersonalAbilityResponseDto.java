@@ -12,6 +12,6 @@ public class PersonalAbilityResponseDto {
 
     public PersonalAbilityResponseDto(PersonalAbility personalAbility) {
         this.id = personalAbility.getId();;
-        this.personalAbility = getPersonalAbility();
+        this.personalAbility = personalAbility.getPersonalAbility();
     }
 }

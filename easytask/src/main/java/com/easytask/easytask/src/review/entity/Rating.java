@@ -21,7 +21,7 @@ public class Rating extends BaseEntity {
     @Column(name = "ratingId")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reviewId")
     private Review review;
 

@@ -3,6 +3,7 @@ package com.easytask.easytask.src.review;
 import com.easytask.easytask.common.response.BaseResponse;
 import com.easytask.easytask.src.review.dto.*;
 import com.easytask.easytask.src.review.dto.request.PersonalAbilityRequestDto;
+import com.easytask.easytask.src.review.dto.request.RatingRequestDto;
 import com.easytask.easytask.src.review.dto.request.ReviewRequestDto;
 import com.easytask.easytask.src.review.dto.response.PersonalAbilityResponseDto;
 import com.easytask.easytask.src.review.dto.response.RatingResponseDto;
@@ -46,8 +47,9 @@ public class ReviewController {
 
     @ResponseBody
     @PostMapping("/add/rating/{reviewId}")
-    public BaseResponse<ReviewResponseDto> addRatingsOfReview(@PathVariable("reviewId") Long reviewId) {
-        ReviewResponseDto reviewResponseDto = reviewService.addRatingsOfReview(reviewId);
+    public BaseResponse<ReviewResponseDto> addRatingsOfReview(@PathVariable("reviewId") Long reviewId,
+                                                              @RequestBody RatingRequestDto ratingRequestDto) {
+        ReviewResponseDto reviewResponseDto = reviewService.addRatingsOfReview(reviewId, ratingRequestDto);
         return new BaseResponse<>(reviewResponseDto);
     }
 
