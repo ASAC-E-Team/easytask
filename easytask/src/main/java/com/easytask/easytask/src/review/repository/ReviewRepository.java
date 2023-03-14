@@ -3,6 +3,7 @@ package com.easytask.easytask.src.review.repository;
 import com.easytask.easytask.common.BaseEntity;
 import com.easytask.easytask.common.BaseEntity.State;
 import com.easytask.easytask.src.review.entity.Review;
+import com.easytask.easytask.src.task.entity.Task;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -44,7 +45,5 @@ public class ReviewRepository {
     public Review findOne(Long reviewId) {
         return entityManger.find(Review.class, reviewId);
     }
-
-
 
 }
