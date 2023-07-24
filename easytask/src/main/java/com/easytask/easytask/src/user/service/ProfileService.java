@@ -1,4 +1,4 @@
-package com.easytask.easytask.src.user;
+package com.easytask.easytask.src.user.service;
 
 import com.easytask.easytask.common.exception.BaseException;
 import com.easytask.easytask.src.user.dto.request.TaskRequestDto;

@@ -1,6 +1,7 @@
-package com.easytask.easytask.src.task;
+package com.easytask.easytask.src.task.controller;
 
 import com.easytask.easytask.common.response.BaseResponse;
+import com.easytask.easytask.src.task.service.TaskService;
 import com.easytask.easytask.src.task.dto.request.RelatedAbilityRequestDto;
 import com.easytask.easytask.src.task.dto.response.RelatedAbilityResponseDto;
 import com.easytask.easytask.src.task.dto.response.TaskResponseDto;

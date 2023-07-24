@@ -1,6 +1,7 @@
-package com.easytask.easytask.src.user;
+package com.easytask.easytask.src.user.controller;
 
 import com.easytask.easytask.common.response.BaseResponse;
+import com.easytask.easytask.src.user.service.ProfileService;
 import com.easytask.easytask.src.user.dto.request.TaskRequestDto;
 import com.easytask.easytask.src.user.dto.response.PossibleTaskResponseDto;
 import com.easytask.easytask.src.user.dto.response.TaskAbilityResponseDto;

@@ -1,4 +1,4 @@
-package com.easytask.easytask.src.review;
+package com.easytask.easytask.src.review.service;
 
 import com.easytask.easytask.common.exception.BaseException;
 import com.easytask.easytask.common.response.BaseResponse;

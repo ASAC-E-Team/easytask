@@ -1,20 +1,17 @@
-package com.easytask.easytask.src.review;
+package com.easytask.easytask.src.review.controller;
 
 import com.easytask.easytask.common.response.BaseResponse;
+import com.easytask.easytask.src.review.service.ReviewService;
 import com.easytask.easytask.src.review.dto.*;
 import com.easytask.easytask.src.review.dto.request.PersonalAbilityRequestDto;
 import com.easytask.easytask.src.review.dto.request.RatingRequestDto;
 import com.easytask.easytask.src.review.dto.request.ReviewRequestDto;
 import com.easytask.easytask.src.review.dto.response.PersonalAbilityResponseDto;
-import com.easytask.easytask.src.review.dto.response.RatingResponseDto;
 import com.easytask.easytask.src.review.dto.response.ReviewResponseDto;
 import com.easytask.easytask.src.review.entity.PersonalAbility;
-import com.easytask.easytask.src.review.entity.Rating;
-import com.easytask.easytask.src.review.entity.Review;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
