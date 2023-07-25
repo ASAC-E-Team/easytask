@@ -113,4 +113,4 @@ JWT 기반으로 로그인을 구현 했을 시 로그아웃을 구현하는 방
 
 해결 방안으로 응답 시간을 줄이기 위해 메일링 서비스를 비동기적으로 처리하고자 했다.  
 
-[비동기 처리를 위한 설정](https://github.com/ASAC-E-Team/easytask/blob/master/easytask/src/main/java/com/easytask/easytask/common/config/AsyncConfiguration.java)을 구성한 뒤, [메일링 서비스 로직을 설정한 Thread 에서 비동기적으로 처리](https://github.com/ASAC-E-Team/easytask/blob/master/easytask/src/main/java/com/easytask/easytask/common/util/MailService.java#L19)하도록 하였다.
+[비동기 처리를 위한 설정](https://github.com/ASAC-E-Team/easytask/blob/master/easytask/src/main/java/com/easytask/easytask/common/config/AsyncConfig.java)을 구성한 뒤, [메일링 서비스 로직을 설정한 Thread 에서 비동기적으로 처리](https://github.com/ASAC-E-Team/easytask/blob/master/easytask/src/main/java/com/easytask/easytask/common/util/MailService.java#L19)하도록 하였다.
