@@ -65,12 +65,6 @@ public class ReviewController {
         return new BaseResponse<>(ratingAverageResponseDto);
     }
 
-//    @PatchMapping("/{reviewId}")
-//    public BaseResponse<ReviewResponseDto> modifyReview(@PathVariable("reviewId") Long reviewId
-//                                                            ,@RequestBody ReviewRequestDto reviewRequestDto) {
-//
-//    }
-
     @DeleteMapping("/{reviewId}")
     public BaseResponse deleteReview(@PathVariable("reviewId") Long reviewId) {
         reviewService.deleteReview(reviewId);
