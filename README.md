@@ -47,9 +47,12 @@
 
 
 
-## 프로젝트 아키텍처 흐름도
+## 시스템 아키텍쳐
 
-<img width=100% src=https://user-images.githubusercontent.com/104514223/226256792-ea8e0f99-5cf7-4a35-a0d1-19d4b4c4fd8a.png>
+<img width=100% src=https://user-images.githubusercontent.com/84704897/235537976-65ff3eba-d5b4-464f-817b-345121aeb3d3.png>
+
+
+- [Github Actions Workflows](https://github.com/Jin959/easytask-test/blob/master/.github/workflows/github-actions.yml)
 
 <br>
 
@@ -90,10 +93,9 @@ JWT 기반으로 로그인을 구현 했을 시 로그아웃을 구현하는 방
 
 <br>
 
-### 2. 대규모가 되었을 때 매칭을 위한 DB 조회 최적화 - by. J Lee
+### 2. 매칭 기능 DB 조회 최적화 - by. J Lee
 
-매칭 시스템을 구현하다가 우리가 기획했던 매칭이 DB의 여러 테이블을 조회하고 풀 스캔을 하는 특징이 있음을 발견했다.
-이 특징으로 인해 매칭은 한 번이 아닌 몇 번의 트랜잭션과 DB 풀 스캔으로 인한 긴 locking 시간을 갖게 되는 문제가 있었다.
+기획했던 매칭 시스템이 반복적으로 DB의 여러 테이블을 조회하고 풀 스캔을 하는 특징이 있음을 발견했다.
 
 이에 대한 고민과 해결과정을 포스팅으로 남겼다.
 
@@ -103,14 +105,12 @@ JWT 기반으로 로그인을 구현 했을 시 로그아웃을 구현하는 방
 
 ### 3. 메일링 기능의 비동기화 - by. J Lee
 
-매칭 시스템이 돌아가면서 알림으로 SMTP 메일링 기능이 수행되도록 구현했다.
+매칭 시스템이 돌아가면서 알림으로 SMTP 메일링 기능이 수행되도록 구현했다.  
+처음 구현했을 때는 단순히 서비스 레이어에서 메일링 서비스 로직을 호출했다. 그러나 메일링이 포함된 요청에 응답하는 데 많은 시간이 걸렸다.
 
-처음에는 단순히 서비스 레이어에서 메일링 서비스 로직을 호출했다.  
-고객이 매칭을 신청하면 고객에게 매칭 신청이 시작되었음을 알리는 메일 전송이 완료가 되고나서야 Client에 신청이 완료되었다는 응답을 내려주었다.  
-동기적으로 해당 과정이 단일 Thread에서 메일링까지 동작한 것이다.  
-이는 우리의 WAS가 다른 요청에 응답하는데 지장이 생기게 하였다.
+예를 들어, 고객이 매칭을 신청하면 매칭 신청이 시작되었음을 알리는 메일 전송이 완전히 완료되고 나서야 매칭 신청이 완료되었다는 응답을 내려주었다.  
+동기적으로 해당 과정이 단일 Thread 에서 메일링까지 동작한 것이다.
 
-이를 해결하기 위해 메일링 서비스를 비동기적으로 처리 하고자 했다.
-스프링에서 제공하는 AsyncConfigurer의 구현체로 비동기 설정을 만들고 `@EnableAsync` 옵션을 주었다.
+해결 방안으로 응답 시간을 줄이기 위해 메일링 서비스를 비동기적으로 처리하고자 했다.  
 
-기존의 메일링 서비스 로직을 해당 설정에 등록하여 비동기적으로 처리할 수 있게 수정하였다.
+[비동기 처리를 위한 설정](https://github.com/ASAC-E-Team/easytask/blob/master/easytask/src/main/java/com/easytask/easytask/common/config/AsyncConfiguration.java)을 구성한 뒤, [메일링 서비스 로직을 설정한 Thread 에서 비동기적으로 처리](https://github.com/ASAC-E-Team/easytask/blob/master/easytask/src/main/java/com/easytask/easytask/common/util/MailService.java#L19)하도록 하였다.
