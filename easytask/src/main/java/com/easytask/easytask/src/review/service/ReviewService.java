@@ -1,8 +1,6 @@
-package com.easytask.easytask.src.review;
+package com.easytask.easytask.src.review.service;
 
 import com.easytask.easytask.common.exception.BaseException;
-import com.easytask.easytask.common.response.BaseResponse;
-import com.easytask.easytask.common.response.BaseResponseStatus;
 import com.easytask.easytask.src.review.dto.*;
 import com.easytask.easytask.src.review.dto.request.PersonalAbilityRequestDto;
 import com.easytask.easytask.src.review.dto.request.RatingRequestDto;
@@ -25,8 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Random;
 
 import static com.easytask.easytask.common.BaseEntity.State.ACTIVE;
 import static com.easytask.easytask.common.response.BaseResponseStatus.BAD_REQUEST_ALREADY_REVIEW;
@@ -90,9 +86,6 @@ public class ReviewService {
 
 
         for (RelatedAbility relatedAbility : relatedAbilityList) {
-//            RelatedAbility findAbility = relatedAbilityRepository.findById(ratingRequestDto.getRelatedAbilityList().get(Rcount))
-//                    .orElseThrow();
-
             int idx = 0;
             for (Long irumiId : dtoAbilityList) {
 

@@ -1,4 +1,4 @@
-package com.easytask.easytask.src.task;
+package com.easytask.easytask.src.task.service;
 
 import com.easytask.easytask.common.exception.BaseException;
 import com.easytask.easytask.common.scheduler.MatchingRequest;
@@ -21,7 +21,6 @@ import com.easytask.easytask.src.user.entity.User;
 import com.easytask.easytask.src.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.ibatis.session.SqlSession;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -47,7 +46,6 @@ public class TaskService {
     private final UserRepository userRepository;
     private final MatchingRequest matchingRequest;
     private final MailService mailService;
-    private final SqlSession session;
 
     public TaskIdResponseDto createTask(Long customerId, TaskRequestDto taskRequestDto) {
         User customer = userRepository.findByIdAndState(customerId, ACTIVE)
