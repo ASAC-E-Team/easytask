@@ -71,7 +71,6 @@ public class UserController {
         }
     }
 
-
     @PatchMapping("/{email}")
     public BaseResponse<String> updateUser(
             @Valid @RequestBody UserRequestDto requestDto, @PathVariable String email) {
